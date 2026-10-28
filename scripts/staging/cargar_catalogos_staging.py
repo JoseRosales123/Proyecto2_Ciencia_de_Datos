@@ -15,8 +15,8 @@ load_dotenv(RAIZ_PROYECTO / ".env")
 
 def conectar():
     return psycopg.connect(
-        host="localhost",
-        port=5433,
+        host=os.getenv("POSTGRES_HOST", "localhost"),
+        port=int(os.getenv("POSTGRES_PORT", "5434")),
         dbname=os.getenv("POSTGRES_DB"),
         user=os.getenv("POSTGRES_USER"),
         password=os.getenv("POSTGRES_PASSWORD"),

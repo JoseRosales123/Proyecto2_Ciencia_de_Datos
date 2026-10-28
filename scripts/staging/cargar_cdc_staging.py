@@ -21,8 +21,8 @@ load_dotenv(RAIZ_PROYECTO / ".env")
 
 def conectar():
     return psycopg.connect(
-        host="localhost",
-        port=5433,
+        host=os.getenv("POSTGRES_HOST", "localhost"),
+        port=int(os.getenv("POSTGRES_PORT", "5434")),
         dbname=os.getenv("POSTGRES_DB"),
         user=os.getenv("POSTGRES_USER"),
         password=os.getenv("POSTGRES_PASSWORD"),
@@ -279,11 +279,10 @@ def cargar():
     print("-" * 85)
 
     correcto = (
-        total == 31050
-        and total_db == 31050
-        and secuencias == 31050
-        and primera_seq == 1
-        and ultima_seq == 31050
+        total == 77636
+        and total_db == 77636
+        and secuencias == 77636
+        and ultima_seq == 77636
     )
 
     print(

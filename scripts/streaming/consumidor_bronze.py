@@ -1,63 +1,131 @@
+
 from pathlib import Path
 from datetime import datetime, timezone
 from collections import defaultdict
-from confluent_kafka import Consumer, KafkaError
-import pyarrow as pa
-import pyarrow.parquet as pq
 import argparse
+import os
 import time
 
+import pyarrow as pa
+import pyarrow.parquet as pq
+
+from confluent_kafka import (
+    Consumer,
+    KafkaError,
+    TopicPartition,
+)
+
+
+# ============================================================
+# CONFIGURACION - PROYECTO 2
+# ============================================================
 
 RAIZ_PROYECTO = Path(__file__).resolve().parents[2]
 BRONZE = RAIZ_PROYECTO / "bronze"
+
+BOOTSTRAP_SERVERS = os.getenv(
+    "KAFKA_BOOTSTRAP_SERVERS",
+    "localhost:9094"
+)
 
 FUENTES = {
     "transmetro": {
         "topic": "transmetro_validaciones",
         "archivo": "transmetro_validaciones.csv",
+        "esperados": 713786,
     },
     "aerometro": {
         "topic": "aerometro_boardings",
         "archivo": "aerometro_boardings.csv",
+        "esperados": 387053,
     },
 }
 
+TIEMPO_MAXIMO_INACTIVIDAD = 90
+
+
+# ============================================================
+# LEER OFFSETS YA GUARDADOS EN BRONZE
+# ============================================================
+
+def leer_estado_bronze(fuente):
+    carpeta = BRONZE / fuente
+
+    offsets_existentes = set()
+    total = 0
+
+    if not carpeta.exists():
+        return offsets_existentes, total
+
+    archivos = sorted(carpeta.rglob("*.parquet"))
+
+    for ruta in archivos:
+        tabla = pq.read_table(
+            ruta,
+            columns=[
+                "kafka_partition",
+                "kafka_offset",
+            ]
+        )
+
+        particiones = tabla["kafka_partition"].to_pylist()
+        offsets = tabla["kafka_offset"].to_pylist()
+
+        for particion, offset in zip(particiones, offsets):
+            clave = (int(particion), int(offset))
+
+            if clave in offsets_existentes:
+                raise RuntimeError(
+                    "Offset duplicado en Bronze: "
+                    f"particion={particion}, "
+                    f"offset={offset}. Archivo: {ruta}"
+                )
+
+            offsets_existentes.add(clave)
+            total += 1
+
+    return offsets_existentes, total
+
+
+# ============================================================
+# ESCRITURA SEGURA DE PARQUET
+# ============================================================
 
 def escribir_batch(registros, fuente):
-    """
-    Escribe un lote en Parquet.
-    El valor original del mensaje se conserva en raw_value.
-    """
-
     if not registros:
         return 0
 
-    # Separamos por fecha de ingesta
     grupos = defaultdict(list)
 
     for registro in registros:
-        grupos[registro["ingestion_date"]].append(registro)
+        clave = (
+            registro["ingestion_date"],
+            registro["kafka_partition"],
+        )
+        grupos[clave].append(registro)
 
     escritos = 0
 
-    for fecha, filas in grupos.items():
-
+    for (fecha, particion), filas in grupos.items():
         carpeta = (
             BRONZE
             / fuente
             / f"ingestion_date={fecha}"
         )
 
-        carpeta.mkdir(parents=True, exist_ok=True)
-
-        particion = filas[0]["kafka_partition"]
+        carpeta.mkdir(
+            parents=True,
+            exist_ok=True
+        )
 
         offset_inicio = min(
-            fila["kafka_offset"] for fila in filas
+            fila["kafka_offset"]
+            for fila in filas
         )
 
         offset_fin = max(
-            fila["kafka_offset"] for fila in filas
+            fila["kafka_offset"]
+            for fila in filas
         )
 
         nombre = (
@@ -67,146 +135,295 @@ def escribir_batch(registros, fuente):
         )
 
         ruta = carpeta / nombre
+        temporal = ruta.with_suffix(".parquet.tmp")
+
+        if ruta.exists():
+            raise RuntimeError(
+                f"Ya existe un lote con el mismo nombre: {ruta}. "
+                "Se requiere revisar sus offsets."
+            )
 
         tabla = pa.Table.from_pylist(filas)
 
-        pq.write_table(
-            tabla,
-            ruta,
-            compression="snappy"
-        )
+        try:
+            pq.write_table(
+                tabla,
+                temporal,
+                compression="snappy"
+            )
+
+            filas_guardadas = (
+                pq.ParquetFile(temporal).metadata.num_rows
+            )
+
+            if filas_guardadas != len(filas):
+                raise RuntimeError(
+                    f"Conteo incorrecto en el lote: {ruta}"
+                )
+
+            temporal.replace(ruta)
+
+        finally:
+            if temporal.exists():
+                temporal.unlink()
 
         escritos += len(filas)
 
         print(
-            f"Bronze -> {ruta.relative_to(RAIZ_PROYECTO)} "
+            f"Bronze -> "
+            f"{ruta.relative_to(RAIZ_PROYECTO)} "
             f"({len(filas):,} registros)"
         )
 
     return escritos
 
 
+# ============================================================
+# CONSUMIR MENSAJES DESDE KAFKA
+# ============================================================
+
 def consumir(fuente, expected=None, batch_size=50000):
 
-    config_fuente = FUENTES[fuente]
+    if batch_size <= 0:
+        raise ValueError(
+            "El tamaño del lote debe ser mayor que cero."
+        )
 
-    topic = config_fuente["topic"]
-    archivo = config_fuente["archivo"]
+    config = FUENTES[fuente]
 
-    consumer = Consumer({
-        "bootstrap.servers": "localhost:9092",
-        "group.id": f"bronze_{fuente}_v1",
+    if expected is None:
+        expected = config["esperados"]
+
+    if expected <= 0:
+        raise ValueError(
+            "El total esperado debe ser mayor que cero."
+        )
+
+    topic = config["topic"]
+
+    offsets_existentes, total_inicial = (
+        leer_estado_bronze(fuente)
+    )
+
+    print("=" * 75)
+    print("PROYECTO 2 - KAFKA -> BRONZE")
+    print("=" * 75)
+    print(f"Fuente:                {fuente}")
+    print(f"Topic:                 {topic}")
+    print(f"Servidor:              {BOOTSTRAP_SERVERS}")
+    print(f"Registros existentes:  {total_inicial:,}")
+    print(f"Objetivo:              {expected:,}")
+    print("=" * 75)
+
+    if total_inicial > expected:
+        raise RuntimeError(
+            f"Bronze contiene {total_inicial:,} registros "
+            f"y solo se esperan {expected:,}."
+        )
+
+    if total_inicial == expected:
+        print(
+            "RESULTADO: BRONZE YA ESTA COMPLETA. "
+            "SE OMITE EL CONSUMO POR IDEMPOTENCIA."
+        )
+        return
+
+    consumidor = Consumer({
+        "bootstrap.servers": BOOTSTRAP_SERVERS,
+        "group.id": f"bronze_p2_{fuente}",
         "auto.offset.reset": "earliest",
         "enable.auto.commit": False,
     })
 
-    consumer.subscribe([topic])
-
     buffer = []
+    offsets_buffer = set()
+    ultimos_offsets = {}
 
-    procesados = 0
-    escritos = 0
-
+    nuevos = 0
+    duplicados_omitidos = 0
     ultima_actividad = time.monotonic()
 
-    print("=" * 70)
-    print("CONSUMIDOR KAFKA -> BRONZE")
-    print("=" * 70)
-    print(f"Fuente: {fuente}")
-    print(f"Topic: {topic}")
-    print(f"Archivo origen: {archivo}")
-    print(f"Batch size: {batch_size:,}")
-    print("=" * 70)
+    def guardar_y_confirmar():
+        nonlocal nuevos
+
+        if buffer:
+            escribir_batch(buffer, fuente)
+
+            for clave in offsets_buffer:
+                offsets_existentes.add(clave)
+
+            nuevos += len(buffer)
+
+            buffer.clear()
+            offsets_buffer.clear()
+
+        # Confirmar solamente offsets de mensajes que
+        # ya quedaron almacenados o fueron verificados
+        # como existentes en Bronze.
+        if ultimos_offsets:
+            posiciones = [
+                TopicPartition(
+                    topic,
+                    particion,
+                    offset + 1
+                )
+                for particion, offset
+                in ultimos_offsets.items()
+            ]
+
+            consumidor.commit(
+                offsets=posiciones,
+                asynchronous=False
+            )
+
+            ultimos_offsets.clear()
 
     try:
+        # Obtener las particiones del topic.
+        metadata = consumidor.list_topics(
+            topic=topic,
+            timeout=20
+        )
 
-        while True:
+        if topic not in metadata.topics:
+            raise RuntimeError(
+                f"El topic {topic} no existe en Kafka."
+            )
 
-            mensaje = consumer.poll(1.0)
+        info_topic = metadata.topics[topic]
+
+        if info_topic.error is not None:
+            raise RuntimeError(
+                f"Error en topic {topic}: "
+                f"{info_topic.error}"
+            )
+
+        particiones = []
+
+        for numero in sorted(info_topic.partitions):
+            particion = TopicPartition(topic, numero)
+
+            minimo, _ = consumidor.get_watermark_offsets(
+                particion,
+                timeout=20
+            )
+
+            particiones.append(
+                TopicPartition(topic, numero, minimo)
+            )
+
+        if not particiones:
+            raise RuntimeError(
+                f"El topic {topic} no tiene particiones."
+            )
+
+        # Releer desde el inicio disponible de Kafka.
+        # Los offsets ya escritos en Bronze se omiten.
+        consumidor.assign(particiones)
+
+        while total_inicial + nuevos < expected:
+
+            mensaje = consumidor.poll(1.0)
 
             if mensaje is None:
-
-                # Si ya se llegó al total esperado terminamos
-                if expected is not None and procesados >= expected:
-                    break
-
-                # Protección para no quedar esperando indefinidamente
-                if time.monotonic() - ultima_actividad > 15:
-                    print("\nNo llegaron más mensajes durante 15 segundos.")
-                    break
+                if (
+                    time.monotonic() - ultima_actividad
+                    > TIEMPO_MAXIMO_INACTIVIDAD
+                ):
+                    raise TimeoutError(
+                        f"Ingesta incompleta para {fuente}. "
+                        f"Bronze inicial={total_inicial:,}; "
+                        f"nuevos={nuevos:,}; "
+                        f"esperados={expected:,}."
+                    )
 
                 continue
 
             if mensaje.error():
-
-                if mensaje.error().code() == KafkaError._PARTITION_EOF:
+                if (
+                    mensaje.error().code()
+                    == KafkaError._PARTITION_EOF
+                ):
                     continue
 
-                raise RuntimeError(mensaje.error())
+                raise RuntimeError(
+                    str(mensaje.error())
+                )
+
+            particion = mensaje.partition()
+            offset = mensaje.offset()
+            clave = (particion, offset)
+
+            ultima_actividad = time.monotonic()
+
+            # Un offset existente no vuelve a escribirse.
+            if clave in offsets_existentes:
+                duplicados_omitidos += 1
+                ultimos_offsets[particion] = offset
+                continue
+
+            if clave in offsets_buffer:
+                raise RuntimeError(
+                    f"Offset repetido en buffer: {clave}"
+                )
 
             ahora = datetime.now(timezone.utc)
 
             registro = {
                 "source_system": fuente,
-                "source_file": archivo,
-
-                # Dato crudo tal como llegó desde Kafka
+                "source_file": config["archivo"],
                 "raw_value": mensaje.value().decode("utf-8"),
-
-                # Metadatos de Kafka
                 "kafka_topic": mensaje.topic(),
-                "kafka_partition": mensaje.partition(),
-                "kafka_offset": mensaje.offset(),
-
-                # Metadatos de ingesta
+                "kafka_partition": particion,
+                "kafka_offset": offset,
                 "ingestion_timestamp": ahora.isoformat(),
                 "ingestion_date": ahora.date().isoformat(),
             }
 
             buffer.append(registro)
+            offsets_buffer.add(clave)
 
-            procesados += 1
-            ultima_actividad = time.monotonic()
+            ultimos_offsets[particion] = offset
 
             if len(buffer) >= batch_size:
+                guardar_y_confirmar()
 
-                escritos += escribir_batch(
-                    buffer,
-                    fuente
-                )
-
-                buffer.clear()
-
-                consumer.commit(
-                    asynchronous=False
-                )
-
-            if expected is not None and procesados >= expected:
+            if (
+                total_inicial + nuevos + len(buffer)
+                >= expected
+            ):
+                guardar_y_confirmar()
                 break
 
-        # Último lote
-        if buffer:
+        # Validación final directamente contra Parquet.
+        _, total_final = leer_estado_bronze(fuente)
 
-            escritos += escribir_batch(
-                buffer,
-                fuente
+        print("\n" + "=" * 75)
+        print(f"Registros anteriores:    {total_inicial:,}")
+        print(f"Registros nuevos:        {nuevos:,}")
+        print(f"Duplicados omitidos:     {duplicados_omitidos:,}")
+        print(f"Total final en Bronze:   {total_final:,}")
+        print(f"Registros esperados:     {expected:,}")
+        print(f"Diferencia:              {total_final - expected:,}")
+        print("=" * 75)
+
+        if total_final != expected:
+            raise RuntimeError(
+                f"Conteo final incorrecto para {fuente}: "
+                f"{total_final} != {expected}"
             )
 
-            buffer.clear()
-
-            consumer.commit(
-                asynchronous=False
-            )
+        print(
+            "RESULTADO: STREAMING RECONCILIADO CORRECTAMENTE"
+        )
 
     finally:
+        consumidor.close()
 
-        consumer.close()
 
-    print("\n" + "=" * 70)
-    print(f"Mensajes consumidos: {procesados:,}")
-    print(f"Registros escritos en Bronze: {escritos:,}")
-    print("=" * 70)
-
+# ============================================================
+# EJECUCION POR TERMINAL
+# ============================================================
 
 if __name__ == "__main__":
 
@@ -214,7 +431,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--source",
-        choices=["transmetro", "aerometro"],
+        choices=list(FUENTES.keys()),
         required=True
     )
 
@@ -235,5 +452,5 @@ if __name__ == "__main__":
     consumir(
         fuente=args.source,
         expected=args.expected,
-        batch_size=args.batch_size
+        batch_size=args.batch_size,
     )

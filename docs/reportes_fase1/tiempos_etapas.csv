@@ -1,0 +1,21 @@
+﻿etapa,segundos,estado
+Verificar aislamiento Docker P2,0.12,OK
+Validar fuentes originales,1.73,OK
+Iniciar Docker Compose,1.02,OK
+Preparar PostgreSQL,2.12,OK
+Preparar Kafka,2.78,OK
+Ingesta Batch,4.03,OK
+Ingesta CDC Bronze,0.37,OK
+Publicar transmetro,1.47,OK
+Publicación Streaming transmetro,1.5,OK
+Consumir transmetro,7.5,OK
+Consumo Streaming transmetro,7.52,OK
+Publicar aerometro,0.93,OK
+Publicación Streaming aerometro,0.96,OK
+Consumir aerometro,3.94,OK
+Consumo Streaming aerometro,3.98,OK
+Reconciliación global Bronze,0.64,OK
+Validar integridad transmetro,2.32,OK
+Validar integridad aerometro,1.19,OK
+Pipeline Prefect Staging Silver Gold,240.27,OK
+TOTAL,270.55,OK

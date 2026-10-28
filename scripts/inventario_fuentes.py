@@ -1,92 +1,159 @@
+
 from pathlib import Path
 import csv
+import sys
 
-# ---------------------------------------------------------
-# Rutas del proyecto
-# ---------------------------------------------------------
+
+# ============================================================
+# RUTAS DEL PROYECTO 2
+# ============================================================
+
 RAIZ_PROYECTO = Path(__file__).resolve().parents[1]
-CARPETA_DATOS = RAIZ_PROYECTO / "datos_fuente"
+CARPETA_DATOS = RAIZ_PROYECTO / "datos_red"
 
-# ---------------------------------------------------------
-# Fuentes entregadas para el proyecto
-# ---------------------------------------------------------
+
+# ============================================================
+# FUENTES Y CONTEOS OFICIALES DEL PROYECTO 2
+# ============================================================
+
 FUENTES = [
-    ("tm_estaciones.csv", "CSV", "Catálogo Transmetro"),
-    ("tu_paradas.csv", "CSV", "Catálogo Transurbano"),
-    ("mr_estaciones.csv", "CSV", "Catálogo MetroRiel"),
-    ("am_estaciones.csv", "CSV", "Catálogo Aerómetro"),
-    ("transmetro_validaciones.csv", "CSV", "Operación Transmetro"),
-    ("transurbano_transacciones.csv", "CSV", "Operación Transurbano"),
-    ("metroriel_viajes.jsonl", "JSONL", "Operación MetroRiel"),
-    ("aerometro_boardings.csv", "CSV", "Operación Aerómetro"),
-    ("cdc_padron_usuarios.csv", "CSV", "CDC padrón usuarios"),
+    ("tm_estaciones.csv", "CSV", "Catalogo Transmetro", 104),
+    ("tu_paradas.csv", "CSV", "Catalogo Transurbano", 328),
+    ("mr_estaciones.csv", "CSV", "Catalogo MetroRiel", 22),
+    ("am_estaciones.csv", "CSV", "Catalogo Aerometro", 14),
+    ("transmetro_validaciones.csv", "CSV", "Operacion Transmetro", 713786),
+    ("transurbano_transacciones.csv", "CSV", "Operacion Transurbano", 1635788),
+    ("metroriel_viajes.jsonl", "JSONL", "Operacion MetroRiel", 590844),
+    ("aerometro_boardings.csv", "CSV", "Operacion Aerometro", 387053),
+    ("cdc_padron_usuarios.csv", "CSV", "CDC padron usuarios", 77636),
 ]
 
 
+# ============================================================
+# FUNCIONES DE CONTEO
+# ============================================================
+
 def contar_csv(ruta):
-    with ruta.open("r", encoding="utf-8-sig", newline="") as archivo:
+    with ruta.open(
+        "r",
+        encoding="utf-8-sig",
+        newline=""
+    ) as archivo:
         lector = csv.reader(archivo)
 
-        # Ignorar encabezado
+        # Omitir encabezado
         next(lector, None)
 
-        return sum(1 for _ in lector)
+        return sum(1 for fila in lector if fila)
 
 
 def contar_jsonl(ruta):
-    with ruta.open("r", encoding="utf-8") as archivo:
-        return sum(1 for linea in archivo if linea.strip())
+    with ruta.open(
+        "r",
+        encoding="utf-8"
+    ) as archivo:
+        return sum(
+            1 for linea in archivo
+            if linea.strip()
+        )
 
 
-print("=" * 100)
-print("INVENTARIO INICIAL DE FUENTES - RED METROPOLITANA")
-print("=" * 100)
+# ============================================================
+# INVENTARIO INICIAL
+# ============================================================
 
-print(
-    f"{'ARCHIVO':<35}"
-    f"{'FORMATO':<10}"
-    f"{'TIPO':<25}"
-    f"{'REGISTROS':>12}"
-    f"{'TAMAÑO MB':>12}"
-)
+def main():
 
-print("-" * 100)
-
-total_registros = 0
-total_mb = 0
-
-for nombre, formato, tipo in FUENTES:
-    ruta = CARPETA_DATOS / nombre
-
-    if not ruta.exists():
-        print(f"{nombre:<35}{'NO ENCONTRADO'}")
-        continue
-
-    if formato == "CSV":
-        registros = contar_csv(ruta)
-    else:
-        registros = contar_jsonl(ruta)
-
-    tamano_mb = ruta.stat().st_size / (1024 * 1024)
-
-    total_registros += registros
-    total_mb += tamano_mb
+    print("=" * 112)
+    print("PROYECTO 2 - INVENTARIO INICIAL DE DATOS")
+    print("=" * 112)
 
     print(
-        f"{nombre:<35}"
-        f"{formato:<10}"
-        f"{tipo:<25}"
-        f"{registros:>12,}"
-        f"{tamano_mb:>12.2f}"
+        f"{'ARCHIVO':<35}"
+        f"{'FORMATO':<9}"
+        f"{'ESPERADOS':>13}"
+        f"{'ENCONTRADOS':>15}"
+        f"{'DIFERENCIA':>13}"
+        f"{'ESTADO':>12}"
     )
 
-print("-" * 100)
+    print("-" * 112)
 
-print(
-    f"{'TOTAL':<70}"
-    f"{total_registros:>12,}"
-    f"{total_mb:>12.2f}"
-)
+    total_esperados = 0
+    total_encontrados = 0
+    todo_correcto = True
 
-print("=" * 100)
-print("Inventario completado correctamente.")
+    for nombre, formato, tipo, esperados in FUENTES:
+
+        ruta = CARPETA_DATOS / nombre
+        total_esperados += esperados
+
+        if not ruta.is_file():
+            todo_correcto = False
+
+            print(
+                f"{nombre:<35}"
+                f"{formato:<9}"
+                f"{esperados:>13,}"
+                f"{'---':>15}"
+                f"{'---':>13}"
+                f"{'NO EXISTE':>12}"
+            )
+            continue
+
+        if formato == "CSV":
+            encontrados = contar_csv(ruta)
+        else:
+            encontrados = contar_jsonl(ruta)
+
+        total_encontrados += encontrados
+        diferencia = encontrados - esperados
+        correcto = diferencia == 0
+
+        if not correcto:
+            todo_correcto = False
+
+        print(
+            f"{nombre:<35}"
+            f"{formato:<9}"
+            f"{esperados:>13,}"
+            f"{encontrados:>15,}"
+            f"{diferencia:>13,}"
+            f"{'OK' if correcto else 'ERROR':>12}"
+        )
+
+    print("-" * 112)
+
+    print(
+        f"{'TOTAL':<44}"
+        f"{total_esperados:>13,}"
+        f"{total_encontrados:>15,}"
+        f"{total_encontrados - total_esperados:>13,}"
+    )
+
+    print("=" * 112)
+
+    print(f"Fuentes esperadas:   {len(FUENTES)}")
+    print(f"Registros esperados: {total_esperados:,}")
+    print(f"Registros hallados:  {total_encontrados:,}")
+    print(
+        f"Diferencia total:    "
+        f"{total_encontrados - total_esperados:,}"
+    )
+
+    if todo_correcto:
+        print(
+            "RESULTADO: LAS 9 FUENTES ORIGINALES "
+            "FUERON VALIDADAS CORRECTAMENTE"
+        )
+        return 0
+
+    print(
+        "RESULTADO: SE ENCONTRARON DIFERENCIAS "
+        "EN LOS DATOS DE ORIGEN"
+    )
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,28 +1,127 @@
+
 from pathlib import Path
+from collections import Counter
 import argparse
+import hashlib
+import sys
+
 import pyarrow.parquet as pq
 
+
+# ============================================================
+# CONFIGURACION DEL PROYECTO 2
+# ============================================================
 
 RAIZ_PROYECTO = Path(__file__).resolve().parents[2]
 
 BRONZE = RAIZ_PROYECTO / "bronze"
-DATOS_FUENTE = RAIZ_PROYECTO / "datos_fuente"
+DATOS_FUENTE = RAIZ_PROYECTO / "datos_red"
 
 
 FUENTES = {
     "transmetro": {
         "archivo": "transmetro_validaciones.csv",
-        "esperados": 363221,
+        "esperados": 713786,
     },
     "aerometro": {
         "archivo": "aerometro_boardings.csv",
-        "esperados": 203554,
+        "esperados": 387053,
     },
 }
 
 
-def validar(fuente):
+# ============================================================
+# CALCULAR HUELLA DEL REGISTRO ORIGINAL
+# ============================================================
 
+def huella_registro(raw_value):
+    return hashlib.sha256(
+        raw_value.encode("utf-8")
+    ).digest()
+
+
+# ============================================================
+# LEER Y CONTAR REGISTROS DEL CSV ORIGINAL
+# ============================================================
+
+def contar_registros_origen(ruta):
+    if not ruta.is_file():
+        raise FileNotFoundError(
+            f"No existe el archivo original: {ruta}"
+        )
+
+    frecuencias = Counter()
+    total = 0
+
+    with ruta.open(
+        "r",
+        encoding="utf-8-sig"
+    ) as archivo:
+
+        next(archivo, None)
+
+        for linea in archivo:
+            raw_value = linea.rstrip("\r\n")
+
+            if not raw_value:
+                continue
+
+            frecuencias[huella_registro(raw_value)] += 1
+            total += 1
+
+    return total, frecuencias
+
+
+# ============================================================
+# LEER Y CONTAR REGISTROS DE BRONZE
+# ============================================================
+
+def contar_registros_bronze(archivos_parquet):
+    frecuencias = Counter()
+    total = 0
+
+    for ruta in archivos_parquet:
+        archivo = pq.ParquetFile(ruta)
+
+        if "raw_value" not in archivo.schema_arrow.names:
+            raise RuntimeError(
+                f"Falta la columna raw_value en: {ruta}"
+            )
+
+        cantidad_archivo = 0
+
+        for lote in archivo.iter_batches(
+            batch_size=50000,
+            columns=["raw_value"]
+        ):
+            valores = lote.column(0).to_pylist()
+
+            for raw_value in valores:
+                if raw_value is None:
+                    raise RuntimeError(
+                        f"Se encontró raw_value nulo en: {ruta}"
+                    )
+
+                frecuencias[
+                    huella_registro(raw_value)
+                ] += 1
+
+                total += 1
+                cantidad_archivo += 1
+
+        print(
+            f"{ruta.name:<55} "
+            f"{cantidad_archivo:>10,} filas"
+        )
+
+    return total, frecuencias
+
+
+# ============================================================
+# VALIDAR UNA FUENTE STREAMING
+# ============================================================
+
+def validar(fuente):
     config = FUENTES[fuente]
 
     carpeta_bronze = BRONZE / fuente
@@ -34,117 +133,131 @@ def validar(fuente):
     )
 
     if not archivos_parquet:
-        print(f"No se encontraron archivos Parquet para {fuente}.")
-        return
-
-    print("=" * 80)
-    print("VALIDACIÓN DE CAPA BRONZE")
-    print("=" * 80)
-    print(f"Fuente: {fuente}")
-    print(f"Archivo original: {config['archivo']}")
-    print(f"Archivos Parquet encontrados: {len(archivos_parquet)}")
-    print("-" * 80)
-
-    total_registros = 0
-
-    for archivo in archivos_parquet:
-
-        metadata = pq.ParquetFile(archivo).metadata
-        filas = metadata.num_rows
-
-        total_registros += filas
-
-        print(
-            f"{archivo.name:<55} "
-            f"{filas:>10,} filas"
+        raise RuntimeError(
+            f"No se encontraron archivos Parquet "
+            f"para {fuente}."
         )
 
-    print("-" * 80)
+    print("=" * 85)
+    print("PROYECTO 2 - VALIDACION DE BRONZE STREAMING")
+    print("=" * 85)
+    print(f"Fuente:              {fuente}")
+    print(f"Archivo original:    {config['archivo']}")
+    print(f"Registros esperados: {esperados:,}")
+    print(f"Archivos Parquet:    {len(archivos_parquet)}")
+    print("-" * 85)
 
-    print(f"Registros esperados:       {esperados:,}")
-    print(f"Registros encontrados:     {total_registros:,}")
+    # --------------------------------------------------------
+    # VALIDAR ESQUEMA DE BRONZE
+    # --------------------------------------------------------
 
-    conteo_correcto = total_registros == esperados
-
-    print(
-        f"Conteo coincide:           "
-        f"{'SI' if conteo_correcto else 'NO'}"
+    columnas = (
+        pq.ParquetFile(archivos_parquet[0])
+        .schema_arrow.names
     )
-
-    # -----------------------------------------------------
-    # Revisar esquema
-    # -----------------------------------------------------
-
-    primer_parquet = archivos_parquet[0]
-
-    tabla = pq.read_table(primer_parquet)
 
     print("\nCOLUMNAS BRONZE:")
 
-    for columna in tabla.column_names:
+    for columna in columnas:
         print(f"  - {columna}")
 
-    # -----------------------------------------------------
-    # Verificar preservación del registro original
-    # -----------------------------------------------------
+    # --------------------------------------------------------
+    # CONTAR REGISTROS Y COMPARAR CONTENIDO ORIGINAL
+    # --------------------------------------------------------
 
-    with archivo_fuente.open(
-        "r",
-        encoding="utf-8-sig"
-    ) as archivo:
+    print("\nLEYENDO REGISTROS DEL ORIGEN...")
 
-        # Saltar encabezado
-        next(archivo)
-
-        primera_linea_original = (
-            next(archivo)
-            .rstrip("\r\n")
-        )
-
-    primer_raw = (
-        tabla["raw_value"][0]
-        .as_py()
+    total_origen, frecuencias_origen = (
+        contar_registros_origen(archivo_fuente)
     )
 
-    coincide_raw = (
-        primera_linea_original == primer_raw
+    print("LEYENDO REGISTROS PARQUET...")
+
+    total_bronze, frecuencias_bronze = (
+        contar_registros_bronze(archivos_parquet)
     )
 
-    print("\nVALIDACIÓN DE DATO CRUDO")
-    print("-" * 80)
+    # Counter conserva también las repeticiones reales.
+    # Dos filas iguales en el CSV deben aparecer dos
+    # veces en Bronze.
+
+    faltantes = sum(
+        (frecuencias_origen - frecuencias_bronze).values()
+    )
+
+    sobrantes = sum(
+        (frecuencias_bronze - frecuencias_origen).values()
+    )
+
+    conteo_correcto = (
+        total_origen == esperados
+        and total_bronze == esperados
+    )
+
+    contenido_correcto = (
+        faltantes == 0
+        and sobrantes == 0
+    )
+
+    # --------------------------------------------------------
+    # MOSTRAR RESULTADOS
+    # --------------------------------------------------------
+
+    print("\n" + "=" * 85)
+    print("RESULTADOS DE VALIDACION")
+    print("=" * 85)
+
+    print(f"Registros esperados:       {esperados:,}")
+    print(f"Registros de origen:       {total_origen:,}")
+    print(f"Registros en Bronze:       {total_bronze:,}")
+    print(f"Diferencia Bronze-origen:  {total_bronze - total_origen:,}")
+    print(f"Registros faltantes:       {faltantes:,}")
+    print(f"Registros sobrantes:       {sobrantes:,}")
 
     print(
-        f"Primer registro original coincide "
-        f"con raw_value: "
-        f"{'SI' if coincide_raw else 'NO'}"
+        f"Conteo correcto:           "
+        f"{'SI' if conteo_correcto else 'NO'}"
     )
 
-    print("\nPrimer registro original:")
-    print(primera_linea_original)
+    print(
+        f"Contenido original intacto: "
+        f"{'SI' if contenido_correcto else 'NO'}"
+    )
 
-    print("\nPrimer raw_value en Bronze:")
-    print(primer_raw)
+    print("=" * 85)
 
-    print("\n" + "=" * 80)
+    if conteo_correcto and contenido_correcto:
+        print(
+            "RESULTADO: BRONZE VALIDADO CORRECTAMENTE"
+        )
+        return 0
 
-    if conteo_correcto and coincide_raw:
-        print("RESULTADO: BRONZE VALIDADO CORRECTAMENTE")
-    else:
-        print("RESULTADO: SE ENCONTRARON DIFERENCIAS")
+    print(
+        "RESULTADO: SE ENCONTRARON DIFERENCIAS "
+        "EN LOS REGISTROS DE BRONZE"
+    )
+    return 1
 
-    print("=" * 80)
 
+# ============================================================
+# EJECUCION POR TERMINAL
+# ============================================================
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description=(
+            "Valida conteos y preservacion de registros "
+            "originales de Streaming en Bronze."
+        )
+    )
 
     parser.add_argument(
         "--source",
-        choices=["transmetro", "aerometro"],
+        choices=list(FUENTES.keys()),
         required=True
     )
 
     args = parser.parse_args()
 
-    validar(args.source)
+    sys.exit(validar(args.source))

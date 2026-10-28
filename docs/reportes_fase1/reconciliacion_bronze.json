@@ -1,0 +1,100 @@
+{
+    "fecha_generacion_utc": "2026-10-28T22:23:24.388881+00:00",
+    "proyecto": "Proyecto 2 - Red Metropolitana",
+    "total_esperados": 3405575,
+    "total_cargados": 3405575,
+    "diferencia_total": 0,
+    "todas_las_fuentes_validas": true,
+    "fuentes": [
+        {
+            "archivo": "tm_estaciones.csv",
+            "via": "Batch",
+            "origen": 104,
+            "esperados": 104,
+            "cargados": 104,
+            "diferencia": 0,
+            "archivos_parquet": 1,
+            "valido": true
+        },
+        {
+            "archivo": "tu_paradas.csv",
+            "via": "Batch",
+            "origen": 328,
+            "esperados": 328,
+            "cargados": 328,
+            "diferencia": 0,
+            "archivos_parquet": 1,
+            "valido": true
+        },
+        {
+            "archivo": "mr_estaciones.csv",
+            "via": "Batch",
+            "origen": 22,
+            "esperados": 22,
+            "cargados": 22,
+            "diferencia": 0,
+            "archivos_parquet": 1,
+            "valido": true
+        },
+        {
+            "archivo": "am_estaciones.csv",
+            "via": "Batch",
+            "origen": 14,
+            "esperados": 14,
+            "cargados": 14,
+            "diferencia": 0,
+            "archivos_parquet": 1,
+            "valido": true
+        },
+        {
+            "archivo": "transmetro_validaciones.csv",
+            "via": "Streaming",
+            "origen": 713786,
+            "esperados": 713786,
+            "cargados": 713786,
+            "diferencia": 0,
+            "archivos_parquet": 15,
+            "valido": true
+        },
+        {
+            "archivo": "transurbano_transacciones.csv",
+            "via": "Batch",
+            "origen": 1635788,
+            "esperados": 1635788,
+            "cargados": 1635788,
+            "diferencia": 0,
+            "archivos_parquet": 33,
+            "valido": true
+        },
+        {
+            "archivo": "metroriel_viajes.jsonl",
+            "via": "Batch",
+            "origen": 590844,
+            "esperados": 590844,
+            "cargados": 590844,
+            "diferencia": 0,
+            "archivos_parquet": 12,
+            "valido": true
+        },
+        {
+            "archivo": "aerometro_boardings.csv",
+            "via": "Streaming",
+            "origen": 387053,
+            "esperados": 387053,
+            "cargados": 387053,
+            "diferencia": 0,
+            "archivos_parquet": 8,
+            "valido": true
+        },
+        {
+            "archivo": "cdc_padron_usuarios.csv",
+            "via": "CDC",
+            "origen": 77636,
+            "esperados": 77636,
+            "cargados": 77636,
+            "diferencia": 0,
+            "archivos_parquet": 8,
+            "valido": true
+        }
+    ]
+}

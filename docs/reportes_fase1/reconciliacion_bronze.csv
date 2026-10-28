@@ -1,0 +1,10 @@
+﻿archivo,via,origen,esperados,cargados,diferencia,archivos_parquet,valido
+tm_estaciones.csv,Batch,104,104,104,0,1,True
+tu_paradas.csv,Batch,328,328,328,0,1,True
+mr_estaciones.csv,Batch,22,22,22,0,1,True
+am_estaciones.csv,Batch,14,14,14,0,1,True
+transmetro_validaciones.csv,Streaming,713786,713786,713786,0,15,True
+transurbano_transacciones.csv,Batch,1635788,1635788,1635788,0,33,True
+metroriel_viajes.jsonl,Batch,590844,590844,590844,0,12,True
+aerometro_boardings.csv,Streaming,387053,387053,387053,0,8,True
+cdc_padron_usuarios.csv,CDC,77636,77636,77636,0,8,True

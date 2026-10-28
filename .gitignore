@@ -40,3 +40,6 @@ dbt_red_metropolitana/logs/
 dbt_red_metropolitana/dbt_packages/
 # Archivos temporales de Tableau
 *.twbr
+
+# Configuración local generada por dbt
+dbt_red_metropolitana/config/.user.yml
