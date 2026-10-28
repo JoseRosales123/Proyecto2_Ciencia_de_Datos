@@ -1,0 +1,35 @@
+version: 2
+
+models:
+
+  - name: silver_identidad_usuarios_seudonimizada
+    description: >
+      Identidades de usuario seudonimizadas mediante HMAC-SHA256
+      antes de su consumo por la capa Gold.
+
+    columns:
+
+      - name: sistema
+        data_tests:
+          - not_null
+
+      - name: llave_original
+        data_tests:
+          - not_null
+
+      - name: usuario_integrado_aprox
+        data_tests:
+          - not_null
+
+      - name: usuario_seudonimo
+        data_tests:
+          - not_null
+
+      - name: estrategia_identidad
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - IDENTIDAD_SEPARADA_AEROMETRO
+                  - IDENTIDAD_NUMERICA_APROX

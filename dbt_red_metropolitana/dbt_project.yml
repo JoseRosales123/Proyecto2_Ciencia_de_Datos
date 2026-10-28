@@ -1,0 +1,32 @@
+name: 'red_metropolitana'
+version: '1.0.0'
+config-version: 2
+
+profile: 'red_metropolitana'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  red_metropolitana:
+
+    silver:
+      +schema: silver
+      +materialized: table
+
+    cuarentena:
+      +schema: cuarentena
+      +materialized: table
+
+    gold:
+      +schema: gold
+      +materialized: table
+
+    features:
+      +schema: features
+      +materialized: table

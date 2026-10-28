@@ -1,0 +1,60 @@
+version: 2
+
+models:
+
+  - name: feat_usuario_movilidad
+    description: >
+      Tabla de features de movilidad construida exclusivamente a partir
+      del detalle de la capa Silver. Una fila representa un usuario
+      seudonimizado observado durante la ventana de análisis.
+
+    columns:
+
+      - name: usuario_seudonimo
+        description: Identificador seudonimizado del usuario.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: fecha_corte
+        description: Fecha máxima observada utilizada como referencia para las ventanas.
+        data_tests:
+          - not_null
+
+      - name: eventos_ultimos_7_dias
+        data_tests:
+          - not_null
+
+      - name: eventos_ultimos_30_dias
+        data_tests:
+          - not_null
+
+      - name: eventos_ultimos_90_dias
+        data_tests:
+          - not_null
+
+      - name: modo_mas_usado
+        data_tests:
+          - not_null
+
+      - name: cantidad_modos_distintos
+        data_tests:
+          - not_null
+
+      - name: dias_desde_ultimo_evento
+        data_tests:
+          - not_null
+
+      - name: proporcion_eventos_hora_pico
+        data_tests:
+          - not_null
+
+      - name: zona_origen_mas_frecuente
+
+      - name: gasto_acumulado_gtq
+        data_tests:
+          - not_null
+
+      - name: gasto_promedio_evento_gtq
+        data_tests:
+          - not_null

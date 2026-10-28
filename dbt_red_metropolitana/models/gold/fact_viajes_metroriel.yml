@@ -1,0 +1,60 @@
+version: 2
+
+models:
+
+  - name: fact_viajes_metroriel
+    description: >
+      Tabla de hechos con grano de un viaje completo valido
+      realizado en MetroRiel.
+
+    columns:
+
+      - name: viaje_key
+        data_tests:
+          - not_null
+          - unique
+
+      - name: identificador_fuente
+        data_tests:
+          - not_null
+          - unique
+
+      - name: modo_key
+        data_tests:
+          - not_null
+
+      - name: usuario_key
+        data_tests:
+          - not_null
+
+      - name: tiempo_key
+        data_tests:
+          - not_null
+
+      - name: punto_origen_key
+        data_tests:
+          - not_null
+
+      - name: punto_destino_key
+        data_tests:
+          - not_null
+
+      - name: zona_origen_key
+        data_tests:
+          - not_null
+
+      - name: zona_destino_key
+        data_tests:
+          - not_null
+
+      - name: tarifa_gtq
+        data_tests:
+          - not_null
+
+      - name: duracion_segundos
+        data_tests:
+          - not_null
+
+      - name: cantidad_viajes
+        data_tests:
+          - not_null

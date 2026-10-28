@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: silver_zonas_conformadas
+    description: >
+      Homologa los nombres de zona utilizados por los cuatro
+      operadores de transporte.
+
+    columns:
+      - name: sistema
+        data_tests:
+          - not_null
+
+      - name: zona_original
+        data_tests:
+          - not_null
+
+      - name: zona_conformada
+        data_tests:
+          - not_null

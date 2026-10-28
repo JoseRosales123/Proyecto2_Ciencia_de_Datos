@@ -1,0 +1,43 @@
+version: 2
+
+models:
+
+  - name: fact_abordajes
+    description: >
+      Tabla de hechos con grano de un abordaje valido para
+      Transmetro, Transurbano y Aerometro.
+
+    columns:
+
+      - name: abordaje_key
+        data_tests:
+          - not_null
+          - unique
+
+      - name: modo_key
+        data_tests:
+          - not_null
+
+      - name: usuario_key
+        data_tests:
+          - not_null
+
+      - name: tiempo_key
+        data_tests:
+          - not_null
+
+      - name: zona_key
+        data_tests:
+          - not_null
+
+      - name: punto_servicio_key
+        data_tests:
+          - not_null
+
+      - name: tarifa_gtq
+        data_tests:
+          - not_null
+
+      - name: cantidad_abordajes
+        data_tests:
+          - not_null

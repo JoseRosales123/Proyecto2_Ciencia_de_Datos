@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: silver_padron_usuarios_scd2
+    description: >
+      Historial SCD Tipo 2 del padrón de usuarios construido a partir
+      de los eventos CDC y respetando el orden de secuencia.
+
+    columns:
+
+      - name: version_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: tarjeta
+        data_tests:
+          - not_null
+
+      - name: vigente_desde_seq
+        data_tests:
+          - not_null

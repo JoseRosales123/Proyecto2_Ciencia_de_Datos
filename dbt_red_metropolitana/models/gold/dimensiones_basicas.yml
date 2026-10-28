@@ -1,0 +1,45 @@
+version: 2
+
+models:
+
+  - name: dim_modo_transporte
+
+    columns:
+
+      - name: modo_key
+        data_tests:
+          - not_null
+          - unique
+
+      - name: modo_transporte
+        data_tests:
+          - not_null
+          - unique
+
+
+  - name: dim_zona
+
+    columns:
+
+      - name: zona_key
+        data_tests:
+          - not_null
+          - unique
+
+      - name: zona_nombre
+        data_tests:
+          - not_null
+          - unique
+
+      - name: tipo_zona
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - ZONA_URBANA
+                  - MUNICIPIO_SECTOR
+
+      - name: tiene_servicio
+        data_tests:
+          - not_null
