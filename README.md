@@ -372,3 +372,109 @@ dbt test --select feat_abandono_cortes --profiles-dir .\config
 - La auditoría realizada comprueba invariancia temporal bajo el límite de lectura aplicado, no aislamiento físico de las fuentes.
 
 **Resultado:** se construyeron características para tres cortes temporales, se integraron las reglas de elegibilidad CDC, se verificó la unicidad y se obtuvo una auditoría temporal con cero diferencias.
+
+
+
+---
+
+## Fase 1.4 — Baselines y regresión logística regularizada
+
+### Objetivo
+
+Comparar dos modelos baseline con regresiones logísticas regularizadas L1 y L2 para predecir el abandono de usuarios de la Red Metropolitana.
+
+El entrenamiento utiliza exclusivamente las etiquetas y características del corte A (2026-07-01).
+
+### Dataset de entrenamiento
+
+Se reutilizan las etiquetas de la fase 1.2 y las características de la fase 1.3.
+
+| Indicador | Resultado |
+|---|---:|
+| Personas | 60,664 |
+| Abandono = 1 | 8,110 |
+| Abandono = 0 | 52,554 |
+| Tasa positiva | 13.3687% |
+| Diferencias entre etiquetas y features | 0 |
+
+El dataset individual se almacena localmente en `datos_modelado_local/fase1_4/dataset_corte_A.csv` y no se publica en GitHub.
+
+### Modelos y validación
+
+Se evaluaron cuatro alternativas:
+
+1. Baseline de tasa positiva del entrenamiento.
+2. Baseline de recencia, utilizando días desde el último viaje.
+3. Regresión logística L1.
+4. Regresión logística L2.
+
+Se utilizó validación cruzada estratificada con cinco folds y semilla 42.
+
+La métrica principal fue Average Precision (AP). Se calcularon también ROC-AUC y F1.
+
+Para L1 y L2 se evaluaron los valores de λ: 0.01, 0.1, 1, 10 y 100.
+
+### Resultados
+
+| Modelo | AP media | Desviación estándar |
+|---|---:|---:|
+| Baseline 1 — Tasa del entrenamiento | 0.133687 | 0.000005 |
+| Baseline 2 — Recencia | 0.456792 | 0.011985 |
+| Regresión logística L1, λ = 1 | **0.482854** | 0.012173 |
+| Regresión logística L2, λ = 0.01 | 0.482802 | 0.012146 |
+
+Se seleccionó L1 con λ = 1 por obtener la AP media más alta.
+
+La diferencia entre L1 y L2 es muy pequeña y no permite afirmar que L1 sea estadísticamente superior.
+
+### Interpretación del modelo
+
+Los principales coeficientes indican que:
+
+- Más días desde el último abordaje se asocian con mayor riesgo de abandono.
+- Una mayor cantidad de eventos recientes se relaciona con menor riesgo.
+- Las zonas 13 y 10 muestran asociaciones positivas respecto de la zona de referencia.
+- Un mayor gasto acumulado se asocia con menor riesgo estimado.
+
+Las relaciones son predictivas y no necesariamente causales.
+
+### Ejecución
+
+Desde la raíz del repositorio:
+
+Generar las etiquetas individuales y el dataset local:
+
+`python .\scripts\modelado\exportar_dataset_corte_a.py`
+
+Entrenar los modelos y generar reportes:
+
+`python .\scripts\modelado\entrenar_baselines_logistica.py`
+
+### Archivos y evidencias
+
+Scripts:
+
+- `scripts/modelado/exportar_dataset_corte_a.py`
+- `scripts/modelado/entrenar_baselines_logistica.py`
+
+Reportes:
+
+- `docs/reportes_fase1_4/tabla_modelos.csv`
+- `docs/reportes_fase1_4/metricas_por_fold.csv`
+- `docs/reportes_fase1_4/metricas_resumen_todos.csv`
+- `docs/reportes_fase1_4/ap_vs_lambda.png`
+- `docs/reportes_fase1_4/coeficientes_modelo_elegido.csv`
+- `docs/reportes_fase1_4/configuracion_resultados.json`
+
+Documentación:
+
+- `docs/Fase_1/fase1_4/documentacion_tecnica.md`
+- `docs/evidencias/Fase_1/fase1_4/`
+
+### Limitaciones
+
+La selección de λ y la estimación de desempeño se realizaron utilizando los mismos cinco folds. Por tanto, el resultado no constituye una evaluación independiente en un conjunto externo.
+
+No se utilizaron etiquetas del corte B.
+
+**Resultado:** se compararon dos baselines con regresiones logísticas L1 y L2, se seleccionó la configuración con mayor AP media y se documentaron las métricas, los coeficientes y la gráfica de regularización.

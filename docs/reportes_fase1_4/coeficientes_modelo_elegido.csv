@@ -1,0 +1,25 @@
+﻿feature_codificada,coeficiente_log_odds,odds_ratio_exp_coef
+num__dias_desde_ultimo_evento,0.8519473396846703,2.3442073780944797
+num__eventos_ultimos_7_dias,-0.7332189136685027,0.48036026060553116
+cat__zona_origen_mas_frecuente_Zona 13,0.5238486890834427,1.6885137245889463
+cat__zona_origen_mas_frecuente_Zona 10,0.5076519633855332,1.6613856172604844
+cat__modo_mas_usado_MetroRiel,0.28634713338024653,1.3315546020843594
+num__gasto_acumulado_gtq,-0.2466193732805036,0.7814380731427432
+num__eventos_ultimos_28_dias,-0.15948592986224064,0.8525819632577055
+cat__modo_mas_usado_Transmetro,-0.1429553514527221,0.8667927690694592
+num__cantidad_modos_distintos,-0.11819117386057722,0.8885261733981095
+cat__zona_origen_mas_frecuente_Zona 9,-0.11400384683121599,0.8922545235232527
+num__gasto_promedio_evento_gtq,-0.11359948743856264,0.8926153879750252
+cat__modo_mas_usado_Transurbano,-0.11163437714222735,0.8943712002819947
+cat__zona_origen_mas_frecuente_Zona 4,-0.1107260811674632,0.8951839230837058
+cat__zona_origen_mas_frecuente_Villa Nueva,0.10089800844796544,1.1061638166454528
+cat__zona_origen_mas_frecuente_Zona 17,-0.09912130184839331,0.9056328464222388
+cat__zona_origen_mas_frecuente_Zona 7,-0.05684196033795242,0.944743364490983
+num__proporcion_eventos_hora_pico,-0.049440636582275856,0.9517616562842598
+cat__zona_origen_mas_frecuente_Zona 6,-0.028195511556935175,0.9721982722211571
+cat__zona_origen_mas_frecuente_Zona 18,0.023951094570615276,1.024240225757709
+cat__zona_origen_mas_frecuente_Zona 12,-0.020639293911911317,0.979572238521754
+cat__zona_origen_mas_frecuente_San Miguel Petapa,0.019267464744616495,1.019454280234821
+cat__zona_origen_mas_frecuente_Zona 8,0.006277529033847086,1.006297274014172
+cat__zona_origen_mas_frecuente_Zona 11,0.00503395270231113,1.0050466443296295
+cat__zona_origen_mas_frecuente_Zona 1,0.0,1.0

@@ -1,0 +1,13 @@
+﻿modelo_elegido,metrica,media,desviacion_estandar,folds
+Baseline 2 — recencia,average_precision,0.4567917380527226,0.011985428534556863,5
+Baseline 2 — recencia,f1_umbral_05,0.4681507238687591,0.006722094682370302,5
+Baseline 2 — recencia,roc_auc,0.840200113231047,0.004452195905169092,5
+Baseline 1 — tasa del train,average_precision,0.13368719518685487,4.927938150684976e-06,5
+Baseline 1 — tasa del train,f1_umbral_05,0.0,0.0,5
+Baseline 1 — tasa del train,roc_auc,0.5,0.0,5
+Logística L1 (λ=1),average_precision,0.48285399105025817,0.01217333382727897,5
+Logística L1 (λ=1),f1_umbral_05,0.38533090098904504,0.01579416256925699,5
+Logística L1 (λ=1),roc_auc,0.8433947662177557,0.002944749985350291,5
+Logística L2 (λ=0.01),average_precision,0.4828017081558803,0.01214586211946838,5
+Logística L2 (λ=0.01),f1_umbral_05,0.3850176415220108,0.016362355795099093,5
+Logística L2 (λ=0.01),roc_auc,0.8433287434000176,0.00294164212331906,5

@@ -1,0 +1,13 @@
+{
+  "fecha_corte": "2026-07-01",
+  "filas": 60664,
+  "positivos": 8110,
+  "negativos": 52554,
+  "metrica_principal": "average_precision",
+  "validacion": "StratifiedKFold 5 folds shuffle=True seed=42",
+  "mejor_lambda_l1": 1.0,
+  "mejor_lambda_l2": 0.01,
+  "regularizacion_ganadora": "l1",
+  "lambda_ganador": 1.0,
+  "nota": "El mismo CV selecciona lambda y estima desempeño; no es una evaluación externa independiente. No se utiliza B."
+}
