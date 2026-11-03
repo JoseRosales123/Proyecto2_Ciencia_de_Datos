@@ -239,3 +239,136 @@ El archivo `resumen_etiquetas_cortes.csv` corresponde al cálculo preliminar de 
 - Los resultados dependen de las reglas de identidad, elegibilidad y observación implementadas.
 
 **Resultado:** se construyeron etiquetas de abandono para dos cortes temporales, se cuantificó el efecto de utilizar PERSONA frente a TARJETA y se estableció una unidad principal para los análisis posteriores.
+
+
+
+---
+
+## Fase 1.3 — Features y auditoría de fuga temporal
+
+### Objetivo
+
+Construir características de movilidad para estudiar el abandono de usuarios de la Red Metropolitana, reutilizando el modelo `feat_usuario_movilidad` del Proyecto 1 y adaptándolo a las reglas temporales y de elegibilidad del Proyecto 2.
+
+Las características se calculan exclusivamente con información anterior a cada fecha de corte, utilizando ventanas máximas de 28 días.
+
+### Modelo implementado
+
+Se creó el modelo:
+
+`dbt_red_metropolitana/models/features/feat_abandono_cortes.sql`
+
+El modelo integra los cuatro sistemas de transporte:
+
+- Transmetro.
+- Transurbano.
+- MetroRiel.
+- Aerómetro.
+
+La unidad de análisis es `usuario_seudonimo`, correspondiente a PERSONA aproximada.
+
+La clave lógica de cada registro es la combinación `(corte, usuario_seudonimo)`.
+
+### Características generadas
+
+| Característica | Descripción |
+|---|---|
+| eventos_ultimos_7_dias | Abordajes durante los siete días anteriores al corte |
+| eventos_ultimos_28_dias | Abordajes durante los 28 días anteriores al corte |
+| modo_mas_usado | Sistema de transporte predominante |
+| cantidad_modos_distintos | Diversidad de sistemas utilizados |
+| dias_desde_ultimo_evento | Días transcurridos desde el último abordaje |
+| proporcion_eventos_hora_pico | Proporción de eventos durante horarios pico |
+| zona_origen_mas_frecuente | Zona de origen predominante |
+| gasto_acumulado_gtq | Gasto acumulado durante la ventana |
+| gasto_promedio_evento_gtq | Gasto promedio por abordaje |
+
+También se conserva `ultimo_evento_previo` para verificar la consistencia temporal.
+
+### Reglas de construcción
+
+- Utilizar eventos procedentes de Silver.
+- Excluir eventos del día de corte y posteriores.
+- Considerar como máximo 28 días anteriores a cada corte.
+- Exigir al menos dos eventos previos.
+- Aplicar la disponibilidad de identificadores según el historial CDC anterior al corte.
+- Conservar personas que tengan otro identificador disponible aunque una tarjeta Transmetro esté dada de baja.
+- Mantener una única fila por persona aproximada y corte.
+
+### Resultados obtenidos
+
+| Corte | Fecha | Personas | Último evento |
+|---|---|---:|---|
+| A | 2026-07-01 | 60,664 | 2026-06-30 |
+| B | 2026-07-31 | 59,126 | 2026-07-30 |
+| C | 2026-08-29 | 58,726 | 2026-08-28 |
+| **Total** | | **178,516** | |
+
+Los cortes A y B coinciden numéricamente con la población elegible calculada en 1.2.
+
+El corte C se utiliza únicamente para generar características, sin etiqueta de abandono validada.
+
+### Auditoría de fuga temporal
+
+Se compararon las características del corte A mediante dos ejecuciones:
+
+1. Cálculo con las fuentes completas y filtros temporales del modelo.
+2. Cálculo con un límite adicional de lectura hasta el 1 de julio de 2026.
+
+Resultados de la comparación:
+
+| Indicador | Resultado |
+|---|---:|
+| Filas originales | 60,664 |
+| Filas recortadas | 60,664 |
+| Registros exclusivos de alguna versión | 0 |
+| Características diferentes | **0** |
+
+La comparación confirmó que las características no cambiaron al aplicar el límite temporal adicional.
+
+La prueba utiliza un recorte lógico de los eventos; no implica eliminación física de datos posteriores ni audita completamente los cambios futuros de identidad.
+
+### Pruebas automáticas
+
+Se incorporaron pruebas de integridad mediante dbt.
+
+Archivos:
+
+- `dbt_red_metropolitana/models/features/feat_abandono_cortes.yml`
+- `dbt_red_metropolitana/tests/test_feat_abandono_cortes_integridad.sql`
+
+Resultado:
+
+- 8 pruebas ejecutadas.
+- 8 pruebas aprobadas.
+- 0 errores.
+- 0 advertencias.
+
+### Ejecución
+
+Desde `dbt_red_metropolitana`:
+
+```powershell
+dbt run --select feat_abandono_cortes --profiles-dir .\config
+```
+
+Para ejecutar las pruebas:
+
+```powershell
+dbt test --select feat_abandono_cortes --profiles-dir .\config
+```
+
+### Documentación y evidencias
+
+- `docs/Fase_1/fase1_3/documentacion_tecnica.md`
+- `docs/evidencias/Fase_1/fase1_3/`
+
+### Limitaciones
+
+- La integración de identidades es aproximada.
+- La cobertura CDC es parcial.
+- La igualdad de conteos con 1.2 todavía debe complementarse con una comparación exacta de identidades.
+- El corte C no tiene una etiqueta de abandono validada.
+- La auditoría realizada comprueba invariancia temporal bajo el límite de lectura aplicado, no aislamiento físico de las fuentes.
+
+**Resultado:** se construyeron características para tres cortes temporales, se integraron las reglas de elegibilidad CDC, se verificó la unicidad y se obtuvo una auditoría temporal con cero diferencias.

@@ -1,0 +1,37 @@
+
+version: 2
+
+models:
+  - name: feat_abandono_cortes
+    description: >
+      Caracteristicas de movilidad de los cortes A, B y C.
+      Utiliza informacion anterior a cada fecha de corte
+      y aplica las reglas de disponibilidad CDC.
+
+    columns:
+      - name: corte
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['A', 'B', 'C']
+
+      - name: fecha_corte
+        data_tests:
+          - not_null
+
+      - name: usuario_seudonimo
+        data_tests:
+          - not_null
+
+      - name: eventos_ultimos_28_dias
+        data_tests:
+          - not_null
+
+      - name: eventos_ultimos_7_dias
+        data_tests:
+          - not_null
+
+      - name: ultimo_evento_previo
+        data_tests:
+          - not_null
