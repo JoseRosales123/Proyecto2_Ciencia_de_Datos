@@ -1,0 +1,114 @@
+{
+    "version":  1,
+    "estado_politica":  "CONGELADA",
+    "estado_b":  "NO_EJECUTADO",
+    "fecha_congelacion_utc":  "2026-11-09T21:44:41.9459440Z",
+    "commit_base":  "1f1adce73c3f130290d4cf7051b73b0cf9270b96",
+    "modelo":  "LogisticRegression L1",
+    "lambda":  1,
+    "hiperparametros":  {
+                            "C":  1.0,
+                            "class_weight":  null,
+                            "dual":  false,
+                            "fit_intercept":  true,
+                            "intercept_scaling":  1,
+                            "l1_ratio":  1.0,
+                            "max_iter":  1500,
+                            "n_jobs":  null,
+                            "penalty":  "deprecated",
+                            "random_state":  42,
+                            "solver":  "liblinear",
+                            "tol":  0.0001,
+                            "verbose":  0,
+                            "warm_start":  false
+                        },
+    "caracteristicas":  [
+                            "eventos_ultimos_7_dias",
+                            "eventos_ultimos_28_dias",
+                            "cantidad_modos_distintos",
+                            "dias_desde_ultimo_evento",
+                            "proporcion_eventos_hora_pico",
+                            "gasto_acumulado_gtq",
+                            "gasto_promedio_evento_gtq",
+                            "modo_mas_usado",
+                            "zona_origen_mas_frecuente"
+                        ],
+    "preprocesamiento":  {
+                             "numericas":  [
+                                               "eventos_ultimos_7_dias",
+                                               "eventos_ultimos_28_dias",
+                                               "cantidad_modos_distintos",
+                                               "dias_desde_ultimo_evento",
+                                               "proporcion_eventos_hora_pico",
+                                               "gasto_acumulado_gtq",
+                                               "gasto_promedio_evento_gtq"
+                                           ],
+                             "categoricas":  [
+                                                 "modo_mas_usado",
+                                                 "zona_origen_mas_frecuente"
+                                             ],
+                             "conversion_numerica":  "pd.to_numeric(errors=coerce)",
+                             "conversion_categorica":  "astype(string).fillna(DESCONOCIDO).astype(str)",
+                             "imputacion_numerica":  "median",
+                             "escalador":  "StandardScaler()",
+                             "imputacion_categorica":  {
+                                                           "fill_value":  "DESCONOCIDO",
+                                                           "strategy":  "constant"
+                                                       },
+                             "onehot":  {
+                                            "handle_unknown":  "ignore",
+                                            "drop":  "first"
+                                        },
+                             "column_transformer":  {
+                                                        "remainder":  "drop",
+                                                        "sparse_threshold":  0.3
+                                                    },
+                             "ajuste":  "solo train en CV; todo A para modelo final; nunca B",
+                             "calibracion_adicional":  "ninguna"
+                         },
+    "semilla":  42,
+    "cv":  {
+               "shuffle":  true,
+               "random_state":  42,
+               "n_splits":  5
+           },
+    "umbral":  {
+                   "comparador":  "\u003e=",
+                   "denominador":  3,
+                   "numerador":  1
+               },
+    "economia":  {
+                     "probabilidad_retencion":  0.25,
+                     "valor_retenido_q":  60,
+                     "beneficio_por_positivo_q":  15,
+                     "costo_contacto_q":  5
+                 },
+    "supuestos":  [
+                      "Retencion condicional a que habria abandonado: 25%",
+                      "Sin beneficio incremental para no abandonantes",
+                      "Costo y valor constantes; sin limite de capacidad",
+                      "Ganancia esperada: suma(15*p-5) para contactos",
+                      "Ganancia observada simulada: 15*TP-5*(TP+FP), no retencion realizada",
+                      "Empate p=1/3: contactar; ganancia esperada cero"
+                  ],
+    "dataset_a":  {
+                      "fecha_corte":  "2026-07-01",
+                      "sha256":  "d7ce3755db9ba7bd4f2679d2cb5caf7e4ca383a7f7b576e298a9a76c0a87795c",
+                      "filas":  60664,
+                      "positivos":  8110,
+                      "corte":  "A",
+                      "ruta":  "datos_modelado_local/fase1_4/dataset_corte_A.csv",
+                      "orden":  "mismo CSV de 1.4, sin ordenar ni filtrar"
+                  },
+    "versiones":  {
+                      "numpy":  "2.5.4",
+                      "sklearn":  "1.9.1",
+                      "pandas":  "3.1.0"
+                  },
+    "sha256_codigo":  {
+                          "scripts/modelado/entrenar_baselines_logistica.py":  "6ab6e410d72c4afcfe566bb99b92c35e3abf60b0d046f0e589bf3692c94423e2",
+                          "scripts/modelado/comparar_ensembles.py":  "440e3adc7078d0a2fde3f1d7c26f65de476907d522030bd08fba73bc08cb8fd4",
+                          "scripts/modelado/evaluar_test_unico_b.py":  "8f067d710085ab3b6122af426aef77a24f86b2d6ddda5deb58a8aa56cb47407e"
+                      },
+    "decision":  "Umbral economico prefijado tras revision OOF de A; no optimizacion empirica ni uso de B"
+}
