@@ -478,3 +478,33 @@ La selección de λ y la estimación de desempeño se realizaron utilizando los 
 No se utilizaron etiquetas del corte B.
 
 **Resultado:** se compararon dos baselines con regresiones logísticas L1 y L2, se seleccionó la configuración con mayor AP media y se documentaron las métricas, los coeficientes y la gráfica de regularización.
+
+---
+
+# Fase 2 — Modelado y evaluación
+
+## 2.1 — Ensemble y sesgo-varianza
+
+Se comparó Random Forest con logística L1 (λ=1) y los dos baselines de 1.4, utilizando exclusivamente el corte A: 60,664 personas y 8,110 positivos. Se conservaron los mismos cinco folds de `StratifiedKFold(n_splits=5, shuffle=True, random_state=42)` y el orden del dataset; el preprocesamiento se ajustó solo con train de cada fold.
+
+| Modelo | AP train, media ± DE | AP validación, media ± DE | Brecha media train−validación |
+|---|---:|---:|---:|
+| Baseline tasa positiva | 0.133687 ± 0.000001 | 0.133687 ± 0.000005 | ≈ 0 |
+| Baseline recencia | 0.456507 ± 0.003003 | 0.456792 ± 0.011985 | −0.000285 |
+| Logística L1, λ=1 | 0.483969 ± 0.002988 | **0.482854 ± 0.012173** | 0.001115 |
+| Random Forest | 0.976434 ± 0.000359 | 0.407661 ± 0.011362 | 0.568774 |
+
+Los resultados corresponden a un bosque de 150 árboles. Su amplia brecha indica sobreajuste marcado, compatible con alta varianza de generalización. Se mantiene logística L1 con λ=1: alcanza la mayor AP media de validación y supera al bosque en los cinco folds. La comparación no constituye una evaluación externa independiente, pues λ se seleccionó previamente con este mismo CV.
+
+Se calcularon diez importancias de columnas codificadas del bosque mediante permutación exclusivamente en validación, con tres repeticiones por característica y fold. El ranking incluye valores negativos y no implica causalidad; existen nueve variables originales.
+
+Documentación y archivos:
+
+- [Documentación técnica de 2.1](docs/Fase_2/fase2_1/documentacion_tecnica.md)
+- [Script de comparación](scripts/modelado/comparar_ensembles.py)
+- [Métricas resumidas](docs/reportes_fase2_1/metricas_resumen.csv)
+- [Top 10 de importancias en validación](docs/reportes_fase2_1/top10_importancias.csv)
+- [Configuración ejecutada](docs/reportes_fase2_1/configuracion.json)
+- [Evidencias de 2.1](docs/evidencias/Fase_2/fase2_1/)
+
+Las tres evidencias solicitadas están presentes. No se utilizaron los cortes B/C ni se publican datasets individuales. Este cierre documental no ejecuta entrenamiento adicional.

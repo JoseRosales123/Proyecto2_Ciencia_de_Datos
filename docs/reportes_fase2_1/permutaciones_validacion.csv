@@ -1,0 +1,361 @@
+﻿fold,caracteristica,repeticion,caida_ap
+1,num__eventos_ultimos_7_dias,1,0.05508706404223773
+1,num__eventos_ultimos_7_dias,2,0.04972377018334728
+1,num__eventos_ultimos_7_dias,3,0.0431650897674386
+1,num__eventos_ultimos_28_dias,1,-0.029587625222233127
+1,num__eventos_ultimos_28_dias,2,-0.033497790790952664
+1,num__eventos_ultimos_28_dias,3,-0.03669604081276295
+1,num__cantidad_modos_distintos,1,-0.008789893548276084
+1,num__cantidad_modos_distintos,2,-0.00754931580950946
+1,num__cantidad_modos_distintos,3,-0.011362929716168202
+1,num__dias_desde_ultimo_evento,1,0.17590993438962094
+1,num__dias_desde_ultimo_evento,2,0.16667378968703747
+1,num__dias_desde_ultimo_evento,3,0.17714040548116478
+1,num__proporcion_eventos_hora_pico,1,-0.0001676635995379594
+1,num__proporcion_eventos_hora_pico,2,-0.0022977300733783013
+1,num__proporcion_eventos_hora_pico,3,-0.006152349762979958
+1,num__gasto_acumulado_gtq,1,-0.02838100543680655
+1,num__gasto_acumulado_gtq,2,-0.042386380098897114
+1,num__gasto_acumulado_gtq,3,-0.03745010731770676
+1,num__gasto_promedio_evento_gtq,1,-0.03392946616792292
+1,num__gasto_promedio_evento_gtq,2,-0.038804560277544975
+1,num__gasto_promedio_evento_gtq,3,-0.03942558287002573
+1,cat__modo_mas_usado_MetroRiel,1,-0.010187389585487927
+1,cat__modo_mas_usado_MetroRiel,2,-0.006901134897370209
+1,cat__modo_mas_usado_MetroRiel,3,-0.007072860300000261
+1,cat__modo_mas_usado_Transmetro,1,-0.01129968956095645
+1,cat__modo_mas_usado_Transmetro,2,-0.01270236640208633
+1,cat__modo_mas_usado_Transmetro,3,-0.01503821105427583
+1,cat__modo_mas_usado_Transurbano,1,-0.019158685705174094
+1,cat__modo_mas_usado_Transurbano,2,-0.020664562652243146
+1,cat__modo_mas_usado_Transurbano,3,-0.021851888532341268
+1,cat__zona_origen_mas_frecuente_San Miguel Petapa,1,-0.0007814964888629428
+1,cat__zona_origen_mas_frecuente_San Miguel Petapa,2,0.0015083736797096847
+1,cat__zona_origen_mas_frecuente_San Miguel Petapa,3,-0.0013493157199727657
+1,cat__zona_origen_mas_frecuente_Villa Nueva,1,-0.0005939777382954481
+1,cat__zona_origen_mas_frecuente_Villa Nueva,2,0.0032685666743236808
+1,cat__zona_origen_mas_frecuente_Villa Nueva,3,0.0024670041377986562
+1,cat__zona_origen_mas_frecuente_Zona 1,1,-0.0035305860625287067
+1,cat__zona_origen_mas_frecuente_Zona 1,2,-0.001924332586226929
+1,cat__zona_origen_mas_frecuente_Zona 1,3,-0.006342272353016765
+1,cat__zona_origen_mas_frecuente_Zona 10,1,0.009671026973284924
+1,cat__zona_origen_mas_frecuente_Zona 10,2,0.008275615496457112
+1,cat__zona_origen_mas_frecuente_Zona 10,3,0.010419073174725124
+1,cat__zona_origen_mas_frecuente_Zona 11,1,-0.0011796524490222393
+1,cat__zona_origen_mas_frecuente_Zona 11,2,-0.0024554356423324153
+1,cat__zona_origen_mas_frecuente_Zona 11,3,-0.0018303460778261726
+1,cat__zona_origen_mas_frecuente_Zona 12,1,-0.001073451101330447
+1,cat__zona_origen_mas_frecuente_Zona 12,2,-0.000814437971269899
+1,cat__zona_origen_mas_frecuente_Zona 12,3,-0.0018325757084908245
+1,cat__zona_origen_mas_frecuente_Zona 13,1,0.0012073433623079888
+1,cat__zona_origen_mas_frecuente_Zona 13,2,-0.0011219263176121541
+1,cat__zona_origen_mas_frecuente_Zona 13,3,0.003443310858817883
+1,cat__zona_origen_mas_frecuente_Zona 17,1,-0.00016468216085224752
+1,cat__zona_origen_mas_frecuente_Zona 17,2,0.0008991157311815101
+1,cat__zona_origen_mas_frecuente_Zona 17,3,0.001905753547506217
+1,cat__zona_origen_mas_frecuente_Zona 18,1,-0.0023858741981117593
+1,cat__zona_origen_mas_frecuente_Zona 18,2,-0.003078892262369237
+1,cat__zona_origen_mas_frecuente_Zona 18,3,-0.004742199402160363
+1,cat__zona_origen_mas_frecuente_Zona 4,1,-0.0013250647485404943
+1,cat__zona_origen_mas_frecuente_Zona 4,2,-0.0004502186158406585
+1,cat__zona_origen_mas_frecuente_Zona 4,3,0.00038213467648973154
+1,cat__zona_origen_mas_frecuente_Zona 6,1,-0.00216202762230866
+1,cat__zona_origen_mas_frecuente_Zona 6,2,-0.004364963547032086
+1,cat__zona_origen_mas_frecuente_Zona 6,3,-0.0015667090765343894
+1,cat__zona_origen_mas_frecuente_Zona 7,1,-0.0016614418669127495
+1,cat__zona_origen_mas_frecuente_Zona 7,2,-0.0024167311662461888
+1,cat__zona_origen_mas_frecuente_Zona 7,3,-0.00498351575798317
+1,cat__zona_origen_mas_frecuente_Zona 8,1,-0.002487569311733495
+1,cat__zona_origen_mas_frecuente_Zona 8,2,-0.0008223240115724506
+1,cat__zona_origen_mas_frecuente_Zona 8,3,-0.0029514248527852116
+1,cat__zona_origen_mas_frecuente_Zona 9,1,0.0026243949911182174
+1,cat__zona_origen_mas_frecuente_Zona 9,2,0.0006574052920508833
+1,cat__zona_origen_mas_frecuente_Zona 9,3,0.0010882112667163213
+2,num__eventos_ultimos_7_dias,1,0.056585792010859615
+2,num__eventos_ultimos_7_dias,2,0.049531043919100126
+2,num__eventos_ultimos_7_dias,3,0.05253294170186845
+2,num__eventos_ultimos_28_dias,1,-0.03029678024470367
+2,num__eventos_ultimos_28_dias,2,-0.023233803963415733
+2,num__eventos_ultimos_28_dias,3,-0.03370662774704586
+2,num__cantidad_modos_distintos,1,-0.00927067475197424
+2,num__cantidad_modos_distintos,2,-0.0103278648399045
+2,num__cantidad_modos_distintos,3,-0.006930298790603973
+2,num__dias_desde_ultimo_evento,1,0.1800630815249234
+2,num__dias_desde_ultimo_evento,2,0.17578402279155678
+2,num__dias_desde_ultimo_evento,3,0.17835245753474274
+2,num__proporcion_eventos_hora_pico,1,-0.007434873429276567
+2,num__proporcion_eventos_hora_pico,2,-0.011941669879344696
+2,num__proporcion_eventos_hora_pico,3,-0.004988969739871285
+2,num__gasto_acumulado_gtq,1,-0.03187025491801759
+2,num__gasto_acumulado_gtq,2,-0.038817698547040924
+2,num__gasto_acumulado_gtq,3,-0.03819916462928613
+2,num__gasto_promedio_evento_gtq,1,-0.03463170315035696
+2,num__gasto_promedio_evento_gtq,2,-0.04175366111983436
+2,num__gasto_promedio_evento_gtq,3,-0.03724840090377052
+2,cat__modo_mas_usado_MetroRiel,1,-0.011043771454020024
+2,cat__modo_mas_usado_MetroRiel,2,-0.008664093953523577
+2,cat__modo_mas_usado_MetroRiel,3,-0.002878398720845887
+2,cat__modo_mas_usado_Transmetro,1,-0.005491443904759807
+2,cat__modo_mas_usado_Transmetro,2,-0.008059841798879142
+2,cat__modo_mas_usado_Transmetro,3,-0.007066739319927129
+2,cat__modo_mas_usado_Transurbano,1,-0.0151143527427276
+2,cat__modo_mas_usado_Transurbano,2,-0.0173778588650349
+2,cat__modo_mas_usado_Transurbano,3,-0.018763712754658157
+2,cat__zona_origen_mas_frecuente_San Miguel Petapa,1,-0.0024567607118946566
+2,cat__zona_origen_mas_frecuente_San Miguel Petapa,2,-0.0036469549298817627
+2,cat__zona_origen_mas_frecuente_San Miguel Petapa,3,-0.003798966686090477
+2,cat__zona_origen_mas_frecuente_Villa Nueva,1,-0.0016835824588791737
+2,cat__zona_origen_mas_frecuente_Villa Nueva,2,0.0001086101263798045
+2,cat__zona_origen_mas_frecuente_Villa Nueva,3,-0.0017478179930823234
+2,cat__zona_origen_mas_frecuente_Zona 1,1,-0.003354353402249488
+2,cat__zona_origen_mas_frecuente_Zona 1,2,0.002111621479136516
+2,cat__zona_origen_mas_frecuente_Zona 1,3,0.0006365177455944226
+2,cat__zona_origen_mas_frecuente_Zona 10,1,0.002480464151022821
+2,cat__zona_origen_mas_frecuente_Zona 10,2,0.0025494831607341673
+2,cat__zona_origen_mas_frecuente_Zona 10,3,0.004312749990480702
+2,cat__zona_origen_mas_frecuente_Zona 11,1,-0.0006640819567205747
+2,cat__zona_origen_mas_frecuente_Zona 11,2,0.0009822702124988036
+2,cat__zona_origen_mas_frecuente_Zona 11,3,-0.00012583896040929687
+2,cat__zona_origen_mas_frecuente_Zona 12,1,0.0015123223994288892
+2,cat__zona_origen_mas_frecuente_Zona 12,2,-0.0011442086919426497
+2,cat__zona_origen_mas_frecuente_Zona 12,3,0.004076572988017946
+2,cat__zona_origen_mas_frecuente_Zona 13,1,-0.0028764231139850605
+2,cat__zona_origen_mas_frecuente_Zona 13,2,0.0017946688779860165
+2,cat__zona_origen_mas_frecuente_Zona 13,3,-0.0010055588569548024
+2,cat__zona_origen_mas_frecuente_Zona 17,1,-0.0007897741981500728
+2,cat__zona_origen_mas_frecuente_Zona 17,2,9.02123367754748e-05
+2,cat__zona_origen_mas_frecuente_Zona 17,3,6.120383193169987e-05
+2,cat__zona_origen_mas_frecuente_Zona 18,1,0.002663951428344913
+2,cat__zona_origen_mas_frecuente_Zona 18,2,0.0005834610129681339
+2,cat__zona_origen_mas_frecuente_Zona 18,3,0.0019166997226734983
+2,cat__zona_origen_mas_frecuente_Zona 4,1,0.003303765908643286
+2,cat__zona_origen_mas_frecuente_Zona 4,2,0.0009351333049303356
+2,cat__zona_origen_mas_frecuente_Zona 4,3,0.001734022210019115
+2,cat__zona_origen_mas_frecuente_Zona 6,1,-0.0010447297156455648
+2,cat__zona_origen_mas_frecuente_Zona 6,2,-0.0012512107064959754
+2,cat__zona_origen_mas_frecuente_Zona 6,3,-0.0020663995754409137
+2,cat__zona_origen_mas_frecuente_Zona 7,1,-0.00015702011886015166
+2,cat__zona_origen_mas_frecuente_Zona 7,2,0.0035981897154831466
+2,cat__zona_origen_mas_frecuente_Zona 7,3,-0.0006997085587319707
+2,cat__zona_origen_mas_frecuente_Zona 8,1,-0.0021799545760856076
+2,cat__zona_origen_mas_frecuente_Zona 8,2,0.0012937900679964032
+2,cat__zona_origen_mas_frecuente_Zona 8,3,0.002401150485682957
+2,cat__zona_origen_mas_frecuente_Zona 9,1,-0.0020432937992472255
+2,cat__zona_origen_mas_frecuente_Zona 9,2,-0.001468932565136305
+2,cat__zona_origen_mas_frecuente_Zona 9,3,-0.0009262467750363879
+3,num__eventos_ultimos_7_dias,1,0.06104652694283691
+3,num__eventos_ultimos_7_dias,2,0.07251881518922926
+3,num__eventos_ultimos_7_dias,3,0.05726149087880433
+3,num__eventos_ultimos_28_dias,1,-0.02933475945953995
+3,num__eventos_ultimos_28_dias,2,-0.028329471236170856
+3,num__eventos_ultimos_28_dias,3,-0.030109458786423737
+3,num__cantidad_modos_distintos,1,-0.01151281605066884
+3,num__cantidad_modos_distintos,2,-0.01368429127647569
+3,num__cantidad_modos_distintos,3,-0.014643507341658368
+3,num__dias_desde_ultimo_evento,1,0.19116587203572338
+3,num__dias_desde_ultimo_evento,2,0.2024895264596968
+3,num__dias_desde_ultimo_evento,3,0.19458289804209758
+3,num__proporcion_eventos_hora_pico,1,-0.003914024798882143
+3,num__proporcion_eventos_hora_pico,2,-0.005333310420438997
+3,num__proporcion_eventos_hora_pico,3,-0.0035070082308497064
+3,num__gasto_acumulado_gtq,1,-0.029778910937476588
+3,num__gasto_acumulado_gtq,2,-0.038427634610947836
+3,num__gasto_acumulado_gtq,3,-0.029585795047765817
+3,num__gasto_promedio_evento_gtq,1,-0.03429370248525315
+3,num__gasto_promedio_evento_gtq,2,-0.026868632951047966
+3,num__gasto_promedio_evento_gtq,3,-0.029145581058626246
+3,cat__modo_mas_usado_MetroRiel,1,-0.002237081620424075
+3,cat__modo_mas_usado_MetroRiel,2,-0.004691136972433951
+3,cat__modo_mas_usado_MetroRiel,3,-0.0034327670601009275
+3,cat__modo_mas_usado_Transmetro,1,-0.0065009044740946265
+3,cat__modo_mas_usado_Transmetro,2,-0.0024360241426152895
+3,cat__modo_mas_usado_Transmetro,3,-0.005374165372227457
+3,cat__modo_mas_usado_Transurbano,1,-0.019906433518268873
+3,cat__modo_mas_usado_Transurbano,2,-0.014026027638527783
+3,cat__modo_mas_usado_Transurbano,3,-0.012079608780128204
+3,cat__zona_origen_mas_frecuente_San Miguel Petapa,1,-0.0020833833184619732
+3,cat__zona_origen_mas_frecuente_San Miguel Petapa,2,-0.003563510203652087
+3,cat__zona_origen_mas_frecuente_San Miguel Petapa,3,-0.0018523402369683972
+3,cat__zona_origen_mas_frecuente_Villa Nueva,1,-0.0030171544330588884
+3,cat__zona_origen_mas_frecuente_Villa Nueva,2,0.0003574122933218682
+3,cat__zona_origen_mas_frecuente_Villa Nueva,3,-0.0019184467058979693
+3,cat__zona_origen_mas_frecuente_Zona 1,1,-0.003272048707495201
+3,cat__zona_origen_mas_frecuente_Zona 1,2,-0.0018955419800193996
+3,cat__zona_origen_mas_frecuente_Zona 1,3,-0.0049953894923555064
+3,cat__zona_origen_mas_frecuente_Zona 10,1,0.0009921427537911698
+3,cat__zona_origen_mas_frecuente_Zona 10,2,0.004007179825930074
+3,cat__zona_origen_mas_frecuente_Zona 10,3,0.00320005853408617
+3,cat__zona_origen_mas_frecuente_Zona 11,1,0.0006720778609196065
+3,cat__zona_origen_mas_frecuente_Zona 11,2,0.0019098454206068483
+3,cat__zona_origen_mas_frecuente_Zona 11,3,-0.00021245701990268984
+3,cat__zona_origen_mas_frecuente_Zona 12,1,0.0018654597859676936
+3,cat__zona_origen_mas_frecuente_Zona 12,2,0.004129359063124671
+3,cat__zona_origen_mas_frecuente_Zona 12,3,0.00027344193250500304
+3,cat__zona_origen_mas_frecuente_Zona 13,1,0.011123755583557937
+3,cat__zona_origen_mas_frecuente_Zona 13,2,0.011124745461063124
+3,cat__zona_origen_mas_frecuente_Zona 13,3,0.0029109127109913646
+3,cat__zona_origen_mas_frecuente_Zona 17,1,-0.0033308219045391496
+3,cat__zona_origen_mas_frecuente_Zona 17,2,-0.005746322397499892
+3,cat__zona_origen_mas_frecuente_Zona 17,3,-0.0014227727964825632
+3,cat__zona_origen_mas_frecuente_Zona 18,1,-0.0032941343368671494
+3,cat__zona_origen_mas_frecuente_Zona 18,2,-0.0008908373248518453
+3,cat__zona_origen_mas_frecuente_Zona 18,3,-1.6229612376184033e-05
+3,cat__zona_origen_mas_frecuente_Zona 4,1,0.00019688828761460497
+3,cat__zona_origen_mas_frecuente_Zona 4,2,2.4171660853333776e-05
+3,cat__zona_origen_mas_frecuente_Zona 4,3,-0.0007341207531479932
+3,cat__zona_origen_mas_frecuente_Zona 6,1,-0.0020438270683365567
+3,cat__zona_origen_mas_frecuente_Zona 6,2,-0.004539931008194109
+3,cat__zona_origen_mas_frecuente_Zona 6,3,-0.0028006044658046014
+3,cat__zona_origen_mas_frecuente_Zona 7,1,0.0013885860384080795
+3,cat__zona_origen_mas_frecuente_Zona 7,2,0.003213519815114474
+3,cat__zona_origen_mas_frecuente_Zona 7,3,0.002381428213683201
+3,cat__zona_origen_mas_frecuente_Zona 8,1,-0.0003525046714956681
+3,cat__zona_origen_mas_frecuente_Zona 8,2,-0.0027176753392349484
+3,cat__zona_origen_mas_frecuente_Zona 8,3,-0.002045365090025675
+3,cat__zona_origen_mas_frecuente_Zona 9,1,5.5245464976427794e-05
+3,cat__zona_origen_mas_frecuente_Zona 9,2,0.00186782710954847
+3,cat__zona_origen_mas_frecuente_Zona 9,3,0.0019417403835829128
+4,num__eventos_ultimos_7_dias,1,0.06337508686848087
+4,num__eventos_ultimos_7_dias,2,0.04129618859871931
+4,num__eventos_ultimos_7_dias,3,0.04971374133297074
+4,num__eventos_ultimos_28_dias,1,-0.01578985136352512
+4,num__eventos_ultimos_28_dias,2,-0.03220373623820133
+4,num__eventos_ultimos_28_dias,3,-0.023174804225780832
+4,num__cantidad_modos_distintos,1,-0.020588859339991217
+4,num__cantidad_modos_distintos,2,-0.019270634986116586
+4,num__cantidad_modos_distintos,3,-0.015021761732634253
+4,num__dias_desde_ultimo_evento,1,0.1983424177691685
+4,num__dias_desde_ultimo_evento,2,0.181904366458072
+4,num__dias_desde_ultimo_evento,3,0.1910279503165775
+4,num__proporcion_eventos_hora_pico,1,0.007352139742736685
+4,num__proporcion_eventos_hora_pico,2,0.006589402928812882
+4,num__proporcion_eventos_hora_pico,3,0.003515122162165818
+4,num__gasto_acumulado_gtq,1,-0.02762671667462674
+4,num__gasto_acumulado_gtq,2,-0.02567580614175413
+4,num__gasto_acumulado_gtq,3,-0.03329901001089469
+4,num__gasto_promedio_evento_gtq,1,-0.02268624891780896
+4,num__gasto_promedio_evento_gtq,2,-0.026373333779844965
+4,num__gasto_promedio_evento_gtq,3,-0.02358571924019942
+4,cat__modo_mas_usado_MetroRiel,1,-0.0016581302173235835
+4,cat__modo_mas_usado_MetroRiel,2,-0.003463542889022564
+4,cat__modo_mas_usado_MetroRiel,3,-0.001902856884477666
+4,cat__modo_mas_usado_Transmetro,1,-0.005901151776969982
+4,cat__modo_mas_usado_Transmetro,2,-0.006897615911517607
+4,cat__modo_mas_usado_Transmetro,3,-0.0061793051753125106
+4,cat__modo_mas_usado_Transurbano,1,-0.010299159682391312
+4,cat__modo_mas_usado_Transurbano,2,-0.010399098240387927
+4,cat__modo_mas_usado_Transurbano,3,-0.008819661078371677
+4,cat__zona_origen_mas_frecuente_San Miguel Petapa,1,6.631685814167954e-05
+4,cat__zona_origen_mas_frecuente_San Miguel Petapa,2,-0.0007392267152562249
+4,cat__zona_origen_mas_frecuente_San Miguel Petapa,3,-0.001909223963784179
+4,cat__zona_origen_mas_frecuente_Villa Nueva,1,6.442701113112959e-05
+4,cat__zona_origen_mas_frecuente_Villa Nueva,2,-0.0020628276949921642
+4,cat__zona_origen_mas_frecuente_Villa Nueva,3,-0.0016086527588508037
+4,cat__zona_origen_mas_frecuente_Zona 1,1,0.002295143311479342
+4,cat__zona_origen_mas_frecuente_Zona 1,2,0.002787496121857913
+4,cat__zona_origen_mas_frecuente_Zona 1,3,0.0033635537573257768
+4,cat__zona_origen_mas_frecuente_Zona 10,1,0.0032911693048472968
+4,cat__zona_origen_mas_frecuente_Zona 10,2,0.0015703285941209844
+4,cat__zona_origen_mas_frecuente_Zona 10,3,0.0005985523187267972
+4,cat__zona_origen_mas_frecuente_Zona 11,1,-0.0006157798267771852
+4,cat__zona_origen_mas_frecuente_Zona 11,2,0.00047706372467382074
+4,cat__zona_origen_mas_frecuente_Zona 11,3,0.0004221013040418553
+4,cat__zona_origen_mas_frecuente_Zona 12,1,-0.0003580598599283169
+4,cat__zona_origen_mas_frecuente_Zona 12,2,-0.000564573197751328
+4,cat__zona_origen_mas_frecuente_Zona 12,3,-0.002525912975967659
+4,cat__zona_origen_mas_frecuente_Zona 13,1,0.013659720957280241
+4,cat__zona_origen_mas_frecuente_Zona 13,2,0.01125278285175707
+4,cat__zona_origen_mas_frecuente_Zona 13,3,0.009768304170903963
+4,cat__zona_origen_mas_frecuente_Zona 17,1,-0.000524837722049587
+4,cat__zona_origen_mas_frecuente_Zona 17,2,-0.0028133873413264676
+4,cat__zona_origen_mas_frecuente_Zona 17,3,-0.0017364836858845822
+4,cat__zona_origen_mas_frecuente_Zona 18,1,-0.0011059211045605366
+4,cat__zona_origen_mas_frecuente_Zona 18,2,-0.0007993875968336783
+4,cat__zona_origen_mas_frecuente_Zona 18,3,-0.0019851550470943446
+4,cat__zona_origen_mas_frecuente_Zona 4,1,-0.0027386289412879017
+4,cat__zona_origen_mas_frecuente_Zona 4,2,-0.0031413553496439928
+4,cat__zona_origen_mas_frecuente_Zona 4,3,-0.0011169901225133172
+4,cat__zona_origen_mas_frecuente_Zona 6,1,-0.004701535542051383
+4,cat__zona_origen_mas_frecuente_Zona 6,2,-3.304223629602143e-05
+4,cat__zona_origen_mas_frecuente_Zona 6,3,-0.0003640862316083848
+4,cat__zona_origen_mas_frecuente_Zona 7,1,-0.002325331136458886
+4,cat__zona_origen_mas_frecuente_Zona 7,2,-0.0034761535928005682
+4,cat__zona_origen_mas_frecuente_Zona 7,3,0.000757216935115157
+4,cat__zona_origen_mas_frecuente_Zona 8,1,0.0029253994253267135
+4,cat__zona_origen_mas_frecuente_Zona 8,2,0.0015850730792386636
+4,cat__zona_origen_mas_frecuente_Zona 8,3,0.002493029905551447
+4,cat__zona_origen_mas_frecuente_Zona 9,1,-0.0031752184425365426
+4,cat__zona_origen_mas_frecuente_Zona 9,2,-0.004282982956300585
+4,cat__zona_origen_mas_frecuente_Zona 9,3,-0.0028414482987124123
+5,num__eventos_ultimos_7_dias,1,0.04519510259427173
+5,num__eventos_ultimos_7_dias,2,0.05167741301153139
+5,num__eventos_ultimos_7_dias,3,0.044284516192635404
+5,num__eventos_ultimos_28_dias,1,-0.04143730729238604
+5,num__eventos_ultimos_28_dias,2,-0.028929264530222543
+5,num__eventos_ultimos_28_dias,3,-0.04179224160103662
+5,num__cantidad_modos_distintos,1,-0.020162476993184575
+5,num__cantidad_modos_distintos,2,-0.013394852881301322
+5,num__cantidad_modos_distintos,3,-0.00991452320710906
+5,num__dias_desde_ultimo_evento,1,0.18375258809039507
+5,num__dias_desde_ultimo_evento,2,0.1831503894469349
+5,num__dias_desde_ultimo_evento,3,0.18315256916352912
+5,num__proporcion_eventos_hora_pico,1,-0.00827737102445697
+5,num__proporcion_eventos_hora_pico,2,-0.0035033845348043102
+5,num__proporcion_eventos_hora_pico,3,-0.0011330265113193017
+5,num__gasto_acumulado_gtq,1,-0.04038368335451481
+5,num__gasto_acumulado_gtq,2,-0.03693327379179723
+5,num__gasto_acumulado_gtq,3,-0.038106973943826006
+5,num__gasto_promedio_evento_gtq,1,-0.036019749562872794
+5,num__gasto_promedio_evento_gtq,2,-0.03943128173174448
+5,num__gasto_promedio_evento_gtq,3,-0.03537319967226138
+5,cat__modo_mas_usado_MetroRiel,1,-0.008902445027939743
+5,cat__modo_mas_usado_MetroRiel,2,-0.009852878791713537
+5,cat__modo_mas_usado_MetroRiel,3,-0.004468407472199787
+5,cat__modo_mas_usado_Transmetro,1,-0.0041008183445587765
+5,cat__modo_mas_usado_Transmetro,2,-0.008573086270306618
+5,cat__modo_mas_usado_Transmetro,3,-0.0053953384932191595
+5,cat__modo_mas_usado_Transurbano,1,-0.01910535092629062
+5,cat__modo_mas_usado_Transurbano,2,-0.01708071136589845
+5,cat__modo_mas_usado_Transurbano,3,-0.01966868014324291
+5,cat__zona_origen_mas_frecuente_San Miguel Petapa,1,0.002121979146348818
+5,cat__zona_origen_mas_frecuente_San Miguel Petapa,2,0.0027724610981872955
+5,cat__zona_origen_mas_frecuente_San Miguel Petapa,3,0.002850569846513107
+5,cat__zona_origen_mas_frecuente_Villa Nueva,1,-0.0013510940395011217
+5,cat__zona_origen_mas_frecuente_Villa Nueva,2,-0.002165319285467815
+5,cat__zona_origen_mas_frecuente_Villa Nueva,3,-0.0007062626606708644
+5,cat__zona_origen_mas_frecuente_Zona 1,1,-0.003226727380863381
+5,cat__zona_origen_mas_frecuente_Zona 1,2,-0.0012406304583938432
+5,cat__zona_origen_mas_frecuente_Zona 1,3,-0.0008627871050316815
+5,cat__zona_origen_mas_frecuente_Zona 10,1,0.0033314026174086075
+5,cat__zona_origen_mas_frecuente_Zona 10,2,0.007762405921350246
+5,cat__zona_origen_mas_frecuente_Zona 10,3,0.007491084666467418
+5,cat__zona_origen_mas_frecuente_Zona 11,1,0.002369763304704675
+5,cat__zona_origen_mas_frecuente_Zona 11,2,0.0024670415293218673
+5,cat__zona_origen_mas_frecuente_Zona 11,3,0.002806838048341642
+5,cat__zona_origen_mas_frecuente_Zona 12,1,-0.0027259216310673295
+5,cat__zona_origen_mas_frecuente_Zona 12,2,-0.0020361632769975158
+5,cat__zona_origen_mas_frecuente_Zona 12,3,-0.002103781794202786
+5,cat__zona_origen_mas_frecuente_Zona 13,1,0.0014114205299968208
+5,cat__zona_origen_mas_frecuente_Zona 13,2,0.009516428182935799
+5,cat__zona_origen_mas_frecuente_Zona 13,3,0.004043438442783098
+5,cat__zona_origen_mas_frecuente_Zona 17,1,-0.0022122039965867257
+5,cat__zona_origen_mas_frecuente_Zona 17,2,-0.0024258241278503623
+5,cat__zona_origen_mas_frecuente_Zona 17,3,-0.004232541577230298
+5,cat__zona_origen_mas_frecuente_Zona 18,1,-0.0011411986629301096
+5,cat__zona_origen_mas_frecuente_Zona 18,2,-0.00117707969499381
+5,cat__zona_origen_mas_frecuente_Zona 18,3,-0.00026007955227808077
+5,cat__zona_origen_mas_frecuente_Zona 4,1,-0.0005682858543754055
+5,cat__zona_origen_mas_frecuente_Zona 4,2,-0.0020192498871969278
+5,cat__zona_origen_mas_frecuente_Zona 4,3,-0.001131330113862794
+5,cat__zona_origen_mas_frecuente_Zona 6,1,-0.004941340056524468
+5,cat__zona_origen_mas_frecuente_Zona 6,2,-0.003164517350513707
+5,cat__zona_origen_mas_frecuente_Zona 6,3,-0.0036034110197048497
+5,cat__zona_origen_mas_frecuente_Zona 7,1,0.0021036658404715025
+5,cat__zona_origen_mas_frecuente_Zona 7,2,0.002523041786308522
+5,cat__zona_origen_mas_frecuente_Zona 7,3,-0.0018685562226228858
+5,cat__zona_origen_mas_frecuente_Zona 8,1,-0.0037802000212263653
+5,cat__zona_origen_mas_frecuente_Zona 8,2,0.00145695588982514
+5,cat__zona_origen_mas_frecuente_Zona 8,3,-0.0008662002025297544
+5,cat__zona_origen_mas_frecuente_Zona 9,1,0.0020572004048087233
+5,cat__zona_origen_mas_frecuente_Zona 9,2,0.0017177158819393634
+5,cat__zona_origen_mas_frecuente_Zona 9,3,0.0010960147149214894
