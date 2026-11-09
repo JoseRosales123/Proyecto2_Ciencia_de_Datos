@@ -11,6 +11,7 @@ B está **NO_EJECUTADO**. No ejecutar el test sin una autorización posterior ex
 - `docs/evidencias/Fase_2/fase2_2/`: cálculo matemático del umbral, calibración y curva de ganancia.
 - `scripts/modelado/seleccionar_umbral.py`: ejecución histórica de A. No volver a ejecutar ahora: puede sobrescribir reportes/documentación.
 - `scripts/modelado/evaluar_test_unico_b.py`: evaluador futuro bloqueado mediante autorización y bitácora exclusiva.
+- [Exportación B — Bloque 4](exportacion_b.md): código preparado en `scripts/modelado/exportar_dataset_corte_b.py`, contrato, controles y procedimiento futuro; no ejecutado.
 
 ## Comprobaciones seguras (no entrenan ni leen A/B)
 
@@ -34,7 +35,7 @@ existencia de las tres evidencias. No se ejecutó CV ni ajuste final ni lectura 
 ## Preparación posterior, todavía no autorizada
 
 1. Revisar y versionar la política y el código antes de habilitar el test. El evaluador exige que estén en Git y sin cambios; este bloque no hace add, commit ni push.
-2. Implementar y revisar un exportador individual B: es una dependencia pendiente. Autorizar por separado su ejecución; no reutilizar ni modificar el exportador de A. El contrato y las auditorías están en la documentación técnica.
+2. Revisar el exportador individual B preparado y sus dependencias en [exportacion_b.md](exportacion_b.md). Su ejecución sigue pendiente de autorización separada; no se modificó el exportador de A. El CSV conserva las columnas de A y añade `corte` y `fecha_corte` para cumplir el contrato del evaluador congelado.
 3. Designar una única máquina/operador. Obtener autorización expresa posterior del usuario para el test único. No crear ahora el archivo de autorización.
 4. Tras esa autorización, preparar localmente `datos_modelado_local/fase2_2/autorizacion_test_b.json`, con este esquema y valores reales; los marcadores no habilitan ninguna ejecución:
 

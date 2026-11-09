@@ -123,10 +123,12 @@ la voluntad del usuario: debe conservar una referencia a su instrucción explíc
 ## Dependencia pendiente: exportación de B
 
 La revisión se limitó al código existente, sin abrir archivos B ni consultar PostgreSQL.
-`scripts/etiquetado/calcular_etiquetas.py` contempla A/B y conteos agregados; no se
-encontró un exportador individual específico para B. `exportar_dataset_corte_a.py`
-está fijado a A y no se modificó. Falta preparar y revisar un exportador B, con autorización
-posterior independiente, antes de habilitar la evaluación. No se ejecutó etiquetado.
+`scripts/etiquetado/calcular_etiquetas.py` contempla A/B y conteos agregados.
+En el Bloque 4 se preparó `scripts/modelado/exportar_dataset_corte_b.py`, sin ejecutarlo;
+el procedimiento, controles y dependencias están en [exportacion_b.md](exportacion_b.md).
+`exportar_dataset_corte_a.py` está fijado a A y no se modificó. Sigue pendiente
+autorizar por separado la exportación de B y verificar cobertura antes de habilitar
+la evaluación. No se ejecutó etiquetado ni se generó un dataset B.
 
 El contrato futuro es un CSV local `datos_modelado_local/fase2_2/dataset_corte_B.csv`
 con las nueve características de 1.4, `abandono`, `usuario_seudonimo`, `corte='B'`
