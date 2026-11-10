@@ -28,6 +28,11 @@ CORTE = date(2026, 7, 31)
 INICIO = CORTE - timedelta(days=28)
 FIN = CORTE + timedelta(days=30)
 PHRASE = 'AUTORIZO_EXPORTACION_B'
+CERTIFIED = 'CERTIFICACION_DE_ORIGEN'
+LIMITED = 'ACEPTACION_LIMITADA_DEL_SNAPSHOT'
+LIMITED_PHRASE = 'AUTORIZO_EXPORTACION_B_SNAPSHOT_LIMITADO'
+PROPOSAL = ROOT / 'docs/Fase_2/fase2_2/propuesta_enmienda_snapshot_b.md'
+ACTA = LOCAL / 'acta_aceptacion_snapshot_b.json'
 
 # Exactamente el orden del COPY de A, más los dos metadatos exigidos por el evaluador.
 COLUMNS_A = [
@@ -173,15 +178,118 @@ def validate_csv(expected_rows):
         raise ValueError('Cardinalidad exportada incompatible')
 
 
-def exportar(coverage_until):
+def validate_request(mode, confirmation, coverage_until, acta_sha256, snapshot_id):
+    """Validación sin IO, también obligatoria para llamadas directas a exportar()."""
+    if mode == CERTIFIED:
+        if confirmation != PHRASE or coverage_until is None or coverage_until < FIN:
+            raise ValueError('Certificación requiere autorización y cobertura completa hasta FIN')
+        if acta_sha256 is not None or snapshot_id is not None:
+            raise ValueError('Certificación no admite parámetros de aceptación limitada')
+        return {'modo': CERTIFIED, 'tipo_respaldo': CERTIFIED,
+                'certificado_origen': True,
+                'cobertura_declarada_hasta_exclusiva': coverage_until.isoformat()}
+    if mode != LIMITED or confirmation != LIMITED_PHRASE:
+        raise ValueError('Falta modo o autorización explícita')
+    if coverage_until is not None:
+        raise ValueError('Aceptación limitada no admite fecha de cobertura certificada')
+    if not is_sha256(acta_sha256) or not isinstance(snapshot_id, str) or not snapshot_id.strip():
+        raise ValueError('Aceptación limitada requiere huella del acta y snapshot identificado')
+    return {'modo': LIMITED, 'tipo_respaldo': LIMITED, 'certificado_origen': False}
+
+
+def is_sha256(value):
+    return isinstance(value, str) and len(value) == 64 and all(c in '0123456789abcdef' for c in value)
+
+
+def git_value(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT, text=True).strip()
+
+
+def require_private(path):
+    relative = path.relative_to(ROOT).as_posix()
+    ignored = subprocess.run(['git', 'check-ignore', '-q', '--', relative], cwd=ROOT)
+    tracked = subprocess.run(['git', 'ls-files', '--error-unmatch', '--', relative],
+                             cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if ignored.returncode != 0 or tracked.returncode == 0:
+        raise RuntimeError('El destino local debe estar excluido y no versionado')
+
+
+def validate_acta(expected_sha, snapshot_id, policy):
+    """Solo acta privada y evidencia agregada permitida; nunca abre CSV B."""
+    require_private(ACTA)
+    # No aceptar un symlink que redirija el acta fuera de su ubicación privada.
+    if ACTA.resolve() != ACTA.absolute():
+        raise ValueError('El acta no puede redirigirse a otra ruta')
+    raw = ACTA.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != expected_sha:
+        raise ValueError('El acta no coincide con la huella aprobada')
+    acta = json.loads(raw)
+    if not isinstance(acta, dict):
+        raise ValueError('El acta debe ser un objeto JSON')
+    required = ('id', 'aprobado_por', 'referencia_aprobacion_enmienda',
+                'referencia_autorizacion_exportacion')
+    if (type(acta.get('version')) is not int or acta['version'] != 1 or
+            acta.get('estado') != 'APROBADA' or acta.get('tipo_respaldo') != LIMITED or
+            acta.get('certificado_origen') is not False or
+            acta.get('evaluacion_b') != 'NO_EJECUTADO' or
+            acta.get('acepta_limitaciones') is not True or
+            any(not isinstance(acta.get(key), str) or not acta[key].strip() for key in required)):
+        raise ValueError('Acta incompleta o sin aprobación explícita')
+    academic = acta.get('validacion_academica', {})
+    if (not isinstance(academic, dict) or
+            academic.get('estado') not in ('APROBADA', 'NO_REQUERIDA_JUSTIFICADA') or
+            not isinstance(academic.get('referencia'), str) or not academic['referencia'].strip()):
+        raise ValueError('Revisión académica pendiente o sin justificación')
+    if acta.get('propuesta_sha256') != digest(PROPOSAL) or acta.get('politica_sha256') != digest(POLICY):
+        raise ValueError('Hash de propuesta/política incorrecto')
+    commit = git_value('rev-parse', 'HEAD')
+    if acta.get('commit') != commit or acta.get('exportador_sha256') != digest(Path(__file__)):
+        raise ValueError('Commit/exportador distinto del aprobado')
+    guarded = [PROPOSAL, POLICY, POLICY.with_suffix('.sha256'), Path(__file__)]
+    for path in guarded:
+        git_value('ls-files', '--error-unmatch', '--', path.relative_to(ROOT).as_posix())
+    if git_value('status', '--porcelain', '--',
+                 *(path.relative_to(ROOT).as_posix() for path in guarded)):
+        raise ValueError('Propuesta, política y exportador deben estar versionados y sin cambios')
+    snapshot = acta.get('snapshot', {})
+    if (not isinstance(snapshot, dict) or snapshot.get('id') != snapshot_id or
+            not isinstance(snapshot.get('descripcion'), str) or not snapshot['descripcion'].strip() or
+            not isinstance(snapshot.get('evidencias'), list) or not snapshot['evidencias']):
+        raise ValueError('Snapshot no identificado o no vinculado a evidencias')
+    canonical = json.dumps(snapshot, sort_keys=True, separators=(',', ':'),
+                           ensure_ascii=False).encode('utf-8')
+    if acta.get('snapshot_sha256') != hashlib.sha256(canonical).hexdigest():
+        raise ValueError('Huella del descriptor de snapshot incorrecta')
+    approved_at = datetime.fromisoformat(acta['fecha_utc'])
+    snapshot_at = datetime.fromisoformat(snapshot['fecha_snapshot_utc'])
+    frozen_at = datetime.fromisoformat(policy['fecha_congelacion_utc'])
+    if (approved_at.tzinfo is None or snapshot_at.tzinfo is None or
+            not frozen_at <= approved_at <= datetime.now(timezone.utc) or snapshot_at > approved_at):
+        raise ValueError('Fechas de aprobación/snapshot inválidas')
+    seen = set()
+    for evidence in snapshot['evidencias']:
+        if not isinstance(evidence, dict) or not isinstance(evidence.get('ruta'), str):
+            raise ValueError('Referencia de evidencia inválida')
+        path = (ROOT / evidence['ruta']).resolve()
+        allowed = ((path.is_relative_to((ROOT / 'docs/reportes_fase2_2/cobertura_fuentes').resolve())
+                    and path.suffix in ('.json', '.jsonl', '.csv')) or
+                   (path.is_relative_to((ROOT / 'bronze/_manifests').resolve()) and path.suffix == '.json'))
+        if not allowed or path in seen or not is_sha256(evidence.get('sha256')):
+            raise ValueError('Evidencia fuera del alcance agregado permitido')
+        seen.add(path)
+        if digest(path) != evidence['sha256']:
+            raise ValueError('Evidencia agregada alterada')
+    return {'acta_sha256': expected_sha, 'acta_id': acta['id'],
+            'propuesta_sha256': acta['propuesta_sha256'],
+            'snapshot_id': snapshot_id, 'snapshot_descriptor_sha256': acta['snapshot_sha256'],
+            'commit_aprobado': commit}
+
+
+def exportar(coverage_until=None, *, modo=None, confirmacion=None, acta_sha256=None, snapshot_id=None):
+    respaldo = validate_request(modo, confirmacion, coverage_until, acta_sha256, snapshot_id)
     # Comprobar exclusión sin abrir datasets. No usar un destino configurable.
     for path in (OUTPUT, PARTIAL, MANIFEST, LEDGER):
-        relative = path.relative_to(ROOT).as_posix()
-        ignored = subprocess.run(['git', 'check-ignore', '-q', '--', relative], cwd=ROOT)
-        tracked = subprocess.run(['git', 'ls-files', '--error-unmatch', '--', relative],
-                                 cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        if ignored.returncode != 0 or tracked.returncode == 0:
-            raise RuntimeError('El destino local debe estar excluido y no versionado')
+        require_private(path)
         if path.exists():
             raise FileExistsError('Ya existe un artefacto de exportación; no sobrescribir')
     # No exportar si hay una evaluación reservada, autorizada o con resultados previos.
@@ -196,6 +304,8 @@ def exportar(coverage_until):
     if (policy['estado_b'] != 'NO_EJECUTADO' or policy['estado_politica'] != 'CONGELADA' or
             policy['caracteristicas'] != NUMERIC + CATEGORICAL):
         raise ValueError('Contrato de política incompatible')
+    if modo == LIMITED:
+        respaldo.update(validate_acta(acta_sha256, snapshot_id, policy))
     LOCAL.mkdir(parents=True, exist_ok=True)
     # Reserva independiente de la del evaluador; no se borra ni reintenta automáticamente.
     with LEDGER.open('x', encoding='utf-8') as ledger:
@@ -208,7 +318,7 @@ def exportar(coverage_until):
             'dbt_red_metropolitana/models/silver/silver_identidad_usuarios_seudonimizada.sql',
         ]
         persist(ledger, {'evento': 'RESERVA_EXPORTACION', 'estado': 'INICIADO',
-                         'politica_sha256': digest(POLICY)})
+                         'politica_sha256': digest(POLICY), **respaldo})
         try:
             # Importaciones diferidas: no ejecutan main() de los módulos reutilizados.
             import psycopg
@@ -227,7 +337,7 @@ def exportar(coverage_until):
                                              text=True).strip()
             code_hashes = {source: digest(ROOT / source) for source in sources}
             persist(ledger, {'evento': 'ANTES_DE_CONSULTAR_B', 'commit': commit,
-                             'cobertura_declarada_hasta_exclusiva': coverage_until.isoformat()})
+                             **respaldo})
             with psycopg.connect(
                 host=os.getenv('POSTGRES_HOST', 'localhost'),
                 port=os.getenv('POSTGRES_PORT', '5434'),
@@ -278,14 +388,15 @@ def exportar(coverage_until):
                     'intervalos': '[inicio, fin)', 'columnas': COLUMNS,
                     'dataset_b_sha256': checksum, 'politica_sha256': digest(POLICY),
                     'sha256_codigo': code_hashes, 'snapshot': 'REPEATABLE READ; UTC',
-                    'cobertura_declarada_hasta_exclusiva': coverage_until.isoformat(),
+                    **respaldo,
+                    'integridad_exportacion': 'VALIDADA',
                     'verificaciones': 'esquema, tipos, cardinalidad, unicidad, población y temporalidad',
                     'evaluacion_b': 'NO_EJECUTADO',
                 }, handle, ensure_ascii=False, indent=2)
                 handle.flush()
                 os.fsync(handle.fileno())
             persist(ledger, {'evento': 'FINALIZADO', 'estado': 'EXPORTADO_VALIDADO',
-                             'dataset_b_sha256': checksum})
+                             'dataset_b_sha256': checksum, **respaldo})
         except BaseException as error:
             persist(ledger, {'evento': 'FALLO_REQUIERE_REVISION', 'tipo': type(error).__name__})
             # Evitar tracebacks/errores SQL con valores individuales o credenciales.
@@ -294,22 +405,34 @@ def exportar(coverage_until):
     print('Conservar CSV, manifiesto y bitácora en el directorio privado excluido de Git.')
 
 
-def main():
+def make_parser():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exportar-b', action='store_true',
                         help='Solo con autorización posterior para consultar/exportar B')
     parser.add_argument('--confirmacion', help=f'Debe ser exactamente {PHRASE}')
     parser.add_argument('--cobertura-confirmada-hasta', type=date.fromisoformat,
                         help='Fin exclusivo ISO de cobertura completa certificada por el operador')
-    args = parser.parse_args()
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument('--certificacion-de-origen', dest='modo', action='store_const', const=CERTIFIED)
+    modes.add_argument('--aceptacion-limitada-del-snapshot', dest='modo', action='store_const', const=LIMITED)
+    parser.add_argument('--acta-sha256', help='Huella externa aprobada del acta privada; no se genera')
+    parser.add_argument('--snapshot-id', help='Identificador exacto del snapshot aceptado')
+    return parser
+
+
+def main(argv=None):
+    parser = make_parser()
+    args = parser.parse_args(argv)
     if not args.exportar_b:
         parser.print_help()
         return
-    if args.confirmacion != PHRASE:
-        parser.error('Falta confirmación explícita; no se ha consultado ningún dato')
-    if args.cobertura_confirmada_hasta is None or args.cobertura_confirmada_hasta < FIN:
-        parser.error('Debe certificarse cobertura completa hasta 2026-08-30 exclusivo o posterior')
-    exportar(args.cobertura_confirmada_hasta)
+    try:
+        validate_request(args.modo, args.confirmacion, args.cobertura_confirmada_hasta,
+                         args.acta_sha256, args.snapshot_id)
+    except ValueError as error:
+        parser.error(str(error))
+    exportar(args.cobertura_confirmada_hasta, modo=args.modo, confirmacion=args.confirmacion,
+             acta_sha256=args.acta_sha256, snapshot_id=args.snapshot_id)
 
 
 if __name__ == '__main__':
