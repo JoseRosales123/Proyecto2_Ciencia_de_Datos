@@ -14,12 +14,55 @@ y mantiene separado Aerómetro; la seudonimización usa `USR:` más HMAC-SHA256 
 clave ya empleada en Silver. No se lee ni publica esa clave.
 
 El exportador importa, solo al autorizarse su ejecución, `SQL_EVENTOS`, las consultas
-CDC/disponibilidad y `preparar_fechas` de `scripts/etiquetado/calcular_etiquetas.py`,
+de último estado CDC/disponibilidad personal y `preparar_fechas` de `scripts/etiquetado/calcular_etiquetas.py`,
 y `SQL_ETIQUETAS` de `scripts/modelado/exportar_dataset_corte_a.py`. No llama a sus
-funciones `main()` ni cambia esos archivos. Se conserva exactamente la elegibilidad:
-al menos dos abordajes previos y al menos un identificador disponible. Una última
+funciones `main()` ni cambia esos archivos. Para la disponibilidad por identificador
+usa ahora `SQL_DISPONIBILIDAD_B`, una variante local de la consulta de A cuya única
+diferencia es `WHEN UPPER(c.op) = 'DELETE' THEN FALSE`, igualando la normalización dbt.
+Se conservan al menos dos abordajes previos y al menos un identificador disponible. Una última
 operación CDC `DELETE` anterior al corte inhabilita esa tarjeta Transmetro; sin
 historial no se considera automáticamente eliminada.
+
+### Corrección CDC localizada y comparabilidad A/B
+
+No hay garantía upstream de capitalización. B reconoce DELETE, delete y Delete como
+bajas; A mantiene su comparación literal histórica. Si todos los op relevantes ya
+están en mayúsculas, ambas consultas son equivalentes. Si hay variantes de DELETE,
+puede cambiar la población elegible de B cuando esa persona no conserve otro
+identificador disponible. No se conoce la frecuencia ni se cuantifica el efecto real:
+no se leyeron datos B. La fórmula de abandono, ventanas, selección del último estado
+por commit_ts/seq, identidad y BOOL_OR personal no cambian. Tampoco se añade TRIM.
+
+No se modifica retrospectivamente A ni su resultado; la posible diferencia de
+tratamiento de capitalización limita la comparabilidad estricta de población A/B y
+debe acompañar cualquier informe posterior. Se busca coherencia de etiquetas B con
+las features dbt, sin modificar modelo L1, preprocesamiento ni umbral congelados.
+
+El hash del exportador cambia respecto de 03455c5; requiere revisión y un nuevo
+commit aprobado antes de exportar. El manifiesto futuro registrará ese commit y la
+nueva huella. El exportador B no figura en `sha256_codigo` de la política e9e0ed5:
+no se cambia esa política, su sidecar ni el evaluador. Conservar ambos commits como
+antecedentes; la autorización futura del test debe vincularse al HEAD aprobado de ejecución.
+
+Las pruebas `tests/modelado/test_cdc_disponibilidad_b.py` usan solo stdlib y SQLite
+en memoria. Leen constantes de código mediante AST sin importar módulos operativos.
+Ejecutan la consulta local real y BOOL_OR registrado en memoria; traducen únicamente
+DISTINCT ON a ROW_NUMBER para seleccionar el último estado en el arnés. Una prueba
+verifica que la variante SQL difiere de A solo en UPPER y que el exportador la usa.
+Cubren capitalización, INSERT/UPDATE, historial ausente, múltiples identificadores,
+frontera estricta del corte, prioridad de fecha y desempate por seq. No sustituyen una
+prueba de integración de PostgreSQL ni acreditan cobertura real.
+
+```powershell
+.\.venv\Scripts\python.exe -m py_compile scripts/modelado/exportar_dataset_corte_b.py tests/modelado/test_cdc_disponibilidad_b.py
+.\.venv\Scripts\python.exe tests/modelado/test_cdc_disponibilidad_b.py -v
+```
+
+Estos comandos no ejecutan exportación ni leen datasets. Se intentaron ambos desde
+Codex con `.venv`: el Python base de WindowsApps no pudo iniciarse (salida 1).
+Por tanto, compilación y diez pruebas quedan **PENDIENTES** de ejecutar desde un
+PowerShell operativo; no se afirma que hayan pasado. La revisión de Git y de huellas
+de los archivos congelados se realiza sin ejecutar módulos operativos.
 
 | Uso | Inicio incluido | Fin excluido |
 |---|---|---|

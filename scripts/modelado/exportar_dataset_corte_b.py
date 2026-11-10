@@ -44,6 +44,24 @@ NUMERIC = [
 ]
 CATEGORICAL = ['modo_mas_usado', 'zona_origen_mas_frecuente']
 
+# Variante local de la consulta de A: solo normaliza op como las features dbt.
+# No cambia el historial, los identificadores ni la regla de disponibilidad personal.
+SQL_DISPONIBILIDAD_B = """
+CREATE TEMP TABLE disponibilidad_12 AS
+SELECT
+    i.usuario_seudonimo,
+    i.sistema || '|' || i.llave_original AS tarjeta_operador,
+    CASE
+        WHEN i.sistema <> 'Transmetro' THEN TRUE
+        WHEN UPPER(c.op) = 'DELETE' THEN FALSE
+        ELSE TRUE
+    END AS habilitada
+FROM silver.silver_identidad_usuarios_seudonimizada i
+LEFT JOIN ultimas_cdc_12 c
+  ON i.sistema = 'Transmetro'
+ AND i.llave_original = c.tarjeta
+"""
+
 SQL_FEATURES = """
 CREATE TEMP TABLE features_b_22 AS
 SELECT * FROM features.feat_abandono_cortes
@@ -197,7 +215,7 @@ def exportar(coverage_until):
             from dotenv import load_dotenv
             sys.path.insert(0, str(ROOT))
             from scripts.etiquetado.calcular_etiquetas import (
-                SQL_EVENTOS, SQL_ULTIMAS_OPERACIONES, SQL_DISPONIBILIDAD,
+                SQL_EVENTOS, SQL_ULTIMAS_OPERACIONES,
                 SQL_DISPONIBILIDAD_PERSONA, preparar_fechas,
             )
             from scripts.modelado.exportar_dataset_corte_a import SQL_ETIQUETAS
@@ -227,7 +245,7 @@ def exportar(coverage_until):
                         if cur.fetchone()[0]:
                             raise ValueError('Hay eventos sin identidad')
                         cur.execute(SQL_ULTIMAS_OPERACIONES, (CORTE,))
-                        cur.execute(SQL_DISPONIBILIDAD)
+                        cur.execute(SQL_DISPONIBILIDAD_B)
                         cur.execute(SQL_DISPONIBILIDAD_PERSONA)
                         cur.execute(SQL_ETIQUETAS, params)
                         cur.execute('CREATE UNIQUE INDEX ON etiquetas_14 (usuario_seudonimo)')
