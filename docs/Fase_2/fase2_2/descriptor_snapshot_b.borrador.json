@@ -1,0 +1,305 @@
+{
+    "version":  1,
+    "id":  "P2_SNAPSHOT_EVIDENCIAS_20261110T040649Z_eec3c7f64818",
+    "descripcion":  "Descriptor documental de alcance prospectivo: estado disponible de red_metropolitana_p2 que capturaria la futura transaccion consistente de exportacion B. Auditoria y respaldo son antecedentes separados; no se afirma igualdad historica con ellos, identidad fisica ni inmutabilidad. No autoriza exportacion ni evaluacion B.",
+    "estado":  "BORRADOR_NO_OPERATIVO",
+    "utilizable_para_exportacion":  false,
+    "certificado_origen":  false,
+    "procedencia_generador":  "no_acreditada",
+    "aprobacion_enmienda":  "PENDIENTE",
+    "exportacion_b":  "NO_EJECUTADA_SEGUN_ESTADO_COMUNICADO_NO_VERIFICADA_LEYENDO_B",
+    "evaluacion_b":  "NO_EJECUTADO_SEGUN_ESTADO_COMUNICADO_NO_VERIFICADO_LEYENDO_B",
+    "commit_base":  "789d2ed0f8503d0620827dea3e35cbc17b307f76",
+    "fecha_snapshot_utc":  "2026-11-10T04:06:49.332515+00:00",
+    "alcance_fecha_snapshot":  "Fecha historica de la evidencia de auditoria conservada para el contrato documental; no fecha de captura de la futura exportacion. El validador exige fecha con zona no posterior a la aprobacion, pero no verifica identidad temporal de PostgreSQL.",
+    "alcance_prospectivo": {
+        "base": "red_metropolitana_p2",
+        "captura_prevista": "Estado visible durante la futura transaccion REPEATABLE READ del exportador; exportacion aun no ejecutada.",
+        "fecha_captura_exportacion_utc": null,
+        "identificador_transaccion_exportacion": null,
+        "id_documental": "El id existente identifica este descriptor y sus antecedentes; no es un identificador de transaccion futura ni una version fisica inmutable.",
+        "igualdad_con_auditoria_o_respaldo": "NO_DEMOSTRADA_NO_PRESUPUESTA",
+        "control_operativo_pendiente": "Designar entorno, custodio y control de escritores para la futura exportacion; requiere aprobacion y autorizacion posteriores.",
+        "limite_validador": "Comprueba campos, fechas y hashes de evidencias documentales; no compara la base activa con el dump ni acredita su inmutabilidad."
+    },
+    "auditoria":  {
+                      "fecha_snapshot_utc": "2026-11-10T04:06:49.332515+00:00",
+                      "ruta":  "docs/reportes_fase2_2/cobertura_fuentes/20261110T040649Z_eec3c7f64818",
+                      "commit_registrado":  "aede6baebe3d2b766e90d73bd243dfabd4867650",
+                      "sha256_script_registrado":  "af5c8e2f580764b93d35d9033a7305dd01100283b9aa6d52817070d3a57b74b0",
+                      "estado_registrado":  "PENDIENTE_CERTIFICACION_ORIGEN",
+                      "certificado_registrado":  false,
+                      "bloqueos_tecnicos_registrados":  0
+                  },
+    "ventanas":  {
+                     "previa":  [
+                                    "2026-07-03T00:00:00",
+                                    "2026-07-31T00:00:00"
+                                ],
+                     "posterior":  [
+                                       "2026-07-31T00:00:00",
+                                       "2026-08-30T00:00:00"
+                                   ],
+                     "intervalos":  "inicio_incluido_fin_excluido",
+                     "relojes":  "Convenciones de las fuentes del etiquetado existente; no UTC uniforme",
+                     "aerometro_posterior_utc":  [
+                                                     "2026-07-31T06:00:00Z",
+                                                     "2026-08-30T06:00:00Z"
+                                                 ]
+                 },
+    "evidencias":  [
+                       {
+                           "ruta":  "docs/reportes_fase2_2/cobertura_fuentes/20261110T040649Z_eec3c7f64818/resultado.json",
+                           "sha256":  "3066d1aab88fda0248cd6f0b5f13c0dff060c5e16e0370aea557f66fdef7489e",
+                           "tipo":  "REPORTE_AGREGADO_EXISTENTE",
+                           "alcance_hash":  "bytes_del_reporte_no_datos_individuales"
+                       },
+                       {
+                           "ruta":  "docs/reportes_fase2_2/cobertura_fuentes/20261110T040649Z_eec3c7f64818/bitacora.jsonl",
+                           "sha256":  "34c770510cdadc0ba6e5ac42d29cc361197ecdf1d71e3d8f2f083c90642ed1b7",
+                           "tipo":  "REPORTE_AGREGADO_EXISTENTE",
+                           "alcance_hash":  "bytes_del_reporte_no_datos_individuales"
+                       },
+                       {
+                           "ruta":  "docs/reportes_fase2_2/cobertura_fuentes/20261110T040649Z_eec3c7f64818/cobertura_diaria.csv",
+                           "sha256":  "7fb03ee05097abe0f7bf0286773d2cd23857fa32d84c2437bc27bb0d3a697716",
+                           "tipo":  "REPORTE_AGREGADO_EXISTENTE",
+                           "alcance_hash":  "bytes_del_reporte_no_datos_individuales"
+                       },
+                       {
+                           "ruta":  "docs/reportes_fase2_2/cobertura_fuentes/20261110T040649Z_eec3c7f64818/fechas_nulas.csv",
+                           "sha256":  "55ad0d2187cfbe381cfb79cb89bd456ee0482bd210f2239b130d3bc090a651b0",
+                           "tipo":  "REPORTE_AGREGADO_EXISTENTE",
+                           "alcance_hash":  "bytes_del_reporte_no_datos_individuales"
+                       },
+                       {
+                           "ruta":  "docs/reportes_fase2_2/cobertura_fuentes/20261110T040649Z_eec3c7f64818/filas_staging.csv",
+                           "sha256":  "e43d89c7d5fee4432e99b1fffe49567a2a63d725407590a268153de9cde0a82b",
+                           "tipo":  "REPORTE_AGREGADO_EXISTENTE",
+                           "alcance_hash":  "bytes_del_reporte_no_datos_individuales"
+                       },
+                       {
+                           "ruta":  "docs/reportes_fase2_2/cobertura_fuentes/20261110T040649Z_eec3c7f64818/filas_batch.csv",
+                           "sha256":  "dd31a98cf56ed50825a47e837d6195604d129fc21b06646e285544ff807ba83b",
+                           "tipo":  "REPORTE_AGREGADO_EXISTENTE",
+                           "alcance_hash":  "bytes_del_reporte_no_datos_individuales"
+                       },
+                       {
+                           "ruta":  "docs/reportes_fase2_2/cobertura_fuentes/20261110T040649Z_eec3c7f64818/offsets_streaming.csv",
+                           "sha256":  "25f9c34c9db807c7f01dbf36716fb3186f4164984990bbb19d49f52a0baee7fe",
+                           "tipo":  "REPORTE_AGREGADO_EXISTENTE",
+                           "alcance_hash":  "bytes_del_reporte_no_datos_individuales"
+                       },
+                       {
+                           "ruta":  "docs/reportes_fase2_2/cobertura_fuentes/20261110T040649Z_eec3c7f64818/manifiestos.csv",
+                           "sha256":  "f8d7e63da1db7dbd0130b1db779e6a2c8311fc524624bc0be9e2ad9343adc0ed",
+                           "tipo":  "REPORTE_AGREGADO_EXISTENTE",
+                           "alcance_hash":  "bytes_del_reporte_no_datos_individuales"
+                       },
+                       {
+                           "ruta":  "bronze/_manifests/tm_estaciones-4d53a95abb4f.json",
+                           "sha256":  "a8a82c59a2a44c9e86a48c4b5deedac86ac038cc1e86d19e679e17ae3ad5134e",
+                           "tipo":  "MANIFIESTO_INGESTA_EXISTENTE",
+                           "fuente":  "tm_estaciones",
+                           "alcance_hash":  "bytes_del_manifiesto_no_bytes_del_archivo_origen"
+                       },
+                       {
+                           "ruta":  "bronze/_manifests/tu_paradas-a888a09c4518.json",
+                           "sha256":  "e9ad7e1bb4af2740aa89c16f3d77083bf9825e06b07aa1ddf6506ac4abc84a71",
+                           "tipo":  "MANIFIESTO_INGESTA_EXISTENTE",
+                           "fuente":  "tu_paradas",
+                           "alcance_hash":  "bytes_del_manifiesto_no_bytes_del_archivo_origen"
+                       },
+                       {
+                           "ruta":  "bronze/_manifests/mr_estaciones-c302ffbc6f0b.json",
+                           "sha256":  "77267c9a5f48fb888a0f5dc73ba372a7a7dddbd6644c67a69009675ee7b0698d",
+                           "tipo":  "MANIFIESTO_INGESTA_EXISTENTE",
+                           "fuente":  "mr_estaciones",
+                           "alcance_hash":  "bytes_del_manifiesto_no_bytes_del_archivo_origen"
+                       },
+                       {
+                           "ruta":  "bronze/_manifests/am_estaciones-e3acbeed8608.json",
+                           "sha256":  "3ba1b699fe338ca184b5bca13ffbace3067641fd8f89806ff1eb4d46deeaebda",
+                           "tipo":  "MANIFIESTO_INGESTA_EXISTENTE",
+                           "fuente":  "am_estaciones",
+                           "alcance_hash":  "bytes_del_manifiesto_no_bytes_del_archivo_origen"
+                       },
+                       {
+                           "ruta":  "bronze/_manifests/transurbano_transacciones-d5c61aee5f64.json",
+                           "sha256":  "ead62fd54ed9755ddef64fb1bea3bb7273840a5eb9595b32fd98d7067b90e063",
+                           "tipo":  "MANIFIESTO_INGESTA_EXISTENTE",
+                           "fuente":  "transurbano_transacciones",
+                           "alcance_hash":  "bytes_del_manifiesto_no_bytes_del_archivo_origen"
+                       },
+                       {
+                           "ruta":  "bronze/_manifests/metroriel_viajes-5fc6b782a29b.json",
+                           "sha256":  "d2d0651dc35e38546d025ca09b93c2e2b7b4aa67ad37a52108ae0c641ae2ab2d",
+                           "tipo":  "MANIFIESTO_INGESTA_EXISTENTE",
+                           "fuente":  "metroriel_viajes",
+                           "alcance_hash":  "bytes_del_manifiesto_no_bytes_del_archivo_origen"
+                       },
+                       {
+                           "ruta":  "bronze/_manifests/cdc_padron_usuarios-f1b483aba844.json",
+                           "sha256":  "c359017fcd5ba0d6d7ce71d545b1ab93922ffe55f8d78a69f376b0bf8c0471be",
+                           "tipo":  "MANIFIESTO_INGESTA_EXISTENTE",
+                           "fuente":  "cdc_padron_usuarios",
+                           "alcance_hash":  "bytes_del_manifiesto_no_bytes_del_archivo_origen"
+                       }
+                   ],
+    "hashes_origen_declarados":  [
+                                     {
+                                         "fuente":  "tm_estaciones",
+                                         "archivo_origen":  "tm_estaciones.csv",
+                                         "sha256_origen_declarado":  "4d53a95abb4f115b7da7f69db2c392e1748d6704807d81408a5e510f791624d0",
+                                         "origen_declaracion":  "bronze/_manifests/tm_estaciones-4d53a95abb4f.json",
+                                         "recalculado_sobre_archivo_original":  false,
+                                         "filas_declaradas":  104,
+                                         "fecha_ingesta_utc":  "2026-10-28T22:22:51.177988+00:00",
+                                         "certifica_completitud":  false
+                                     },
+                                     {
+                                         "fuente":  "tu_paradas",
+                                         "archivo_origen":  "tu_paradas.csv",
+                                         "sha256_origen_declarado":  "a888a09c45189cfeac0a0577377d1b4c662923ee55f798d961f418aa2ac93b90",
+                                         "origen_declaracion":  "bronze/_manifests/tu_paradas-a888a09c4518.json",
+                                         "recalculado_sobre_archivo_original":  false,
+                                         "filas_declaradas":  328,
+                                         "fecha_ingesta_utc":  "2026-10-28T22:22:51.231920+00:00",
+                                         "certifica_completitud":  false
+                                     },
+                                     {
+                                         "fuente":  "mr_estaciones",
+                                         "archivo_origen":  "mr_estaciones.csv",
+                                         "sha256_origen_declarado":  "c302ffbc6f0bdcf926c8eaaf9a5427ec5d38d482cc44431e3aeb20a8febb8e8c",
+                                         "origen_declaracion":  "bronze/_manifests/mr_estaciones-c302ffbc6f0b.json",
+                                         "recalculado_sobre_archivo_original":  false,
+                                         "filas_declaradas":  22,
+                                         "fecha_ingesta_utc":  "2026-10-28T22:22:51.243313+00:00",
+                                         "certifica_completitud":  false
+                                     },
+                                     {
+                                         "fuente":  "am_estaciones",
+                                         "archivo_origen":  "am_estaciones.csv",
+                                         "sha256_origen_declarado":  "e3acbeed8608fb9a6b9a8df87646bf5294e644aa64bd95484f1424b92ae21723",
+                                         "origen_declaracion":  "bronze/_manifests/am_estaciones-e3acbeed8608.json",
+                                         "recalculado_sobre_archivo_original":  false,
+                                         "filas_declaradas":  14,
+                                         "fecha_ingesta_utc":  "2026-10-28T22:22:51.254478+00:00",
+                                         "certifica_completitud":  false
+                                     },
+                                     {
+                                         "fuente":  "transurbano_transacciones",
+                                         "archivo_origen":  "transurbano_transacciones.csv",
+                                         "sha256_origen_declarado":  "d5c61aee5f642563638bab6b174a397d2fbd5136a368063deeee6715a648bd65",
+                                         "origen_declaracion":  "bronze/_manifests/transurbano_transacciones-d5c61aee5f64.json",
+                                         "recalculado_sobre_archivo_original":  false,
+                                         "filas_declaradas":  1635788,
+                                         "fecha_ingesta_utc":  "2026-10-28T22:22:52.545526+00:00",
+                                         "certifica_completitud":  false
+                                     },
+                                     {
+                                         "fuente":  "metroriel_viajes",
+                                         "archivo_origen":  "metroriel_viajes.jsonl",
+                                         "sha256_origen_declarado":  "5fc6b782a29b6b33e218c52d1dc371526e1ae563d3a01b6bf706f3d7ccbc1812",
+                                         "origen_declaracion":  "bronze/_manifests/metroriel_viajes-5fc6b782a29b.json",
+                                         "recalculado_sobre_archivo_original":  false,
+                                         "filas_declaradas":  590844,
+                                         "fecha_ingesta_utc":  "2026-10-28T22:22:51.329265+00:00",
+                                         "certifica_completitud":  false
+                                     },
+                                     {
+                                         "fuente":  "cdc_padron_usuarios",
+                                         "archivo_origen":  "cdc_padron_usuarios.csv",
+                                         "sha256_origen_declarado":  "f1b483aba844ad1c5c1da71003c621bcbc8ce231ecf5283e42d18050261f480f",
+                                         "origen_declaracion":  "bronze/_manifests/cdc_padron_usuarios-f1b483aba844.json",
+                                         "recalculado_sobre_archivo_original":  false,
+                                         "filas_declaradas":  77636,
+                                         "fecha_ingesta_utc":  "2026-10-28T22:22:55.165843+00:00",
+                                         "certifica_completitud":  false
+                                     }
+                                 ],
+    "cotejo_manifiestos_con_reporte_agregado":  [
+                                                    {
+                                                        "fuente":  "transurbano_transacciones",
+                                                        "hash_manifiesto_coincide_auditoria":  true,
+                                                        "hash_origen_declarado_coincide_auditoria":  true
+                                                    },
+                                                    {
+                                                        "fuente":  "metroriel_viajes",
+                                                        "hash_manifiesto_coincide_auditoria":  true,
+                                                        "hash_origen_declarado_coincide_auditoria":  true
+                                                    },
+                                                    {
+                                                        "fuente":  "cdc_padron_usuarios",
+                                                        "hash_manifiesto_coincide_auditoria":  true,
+                                                        "hash_origen_declarado_coincide_auditoria":  true
+                                                    }
+                                                ],
+    "streaming":  {
+                      "fuentes":  [
+                                      "transmetro",
+                                      "aerometro"
+                                  ],
+                      "evidencia_offsets":  "docs/reportes_fase2_2/cobertura_fuentes/20261110T040649Z_eec3c7f64818/offsets_streaming.csv",
+                      "hash_archivos_originales":  null,
+                      "motivo":  "No disponible en las evidencias de manifiestos revisadas. No se han leido archivos originales para calcularlo.",
+                      "cierre_publicacion_origen":  "NO_ACREDITADO_INDEPENDIENTEMENTE"
+                  },
+    "respaldo_logico_referenciado":  {
+        "id": "20261111T060925Z_3dfebab0",
+        "tipo": "PG_DUMP_CUSTOM",
+        "comando_creacion_reportado": "pg_dump -Fc",
+        "fecha_creacion_utc": "2026-11-11T06:09:25Z",
+        "archivo_privado": "C:\\Respaldos_Privados_P2\\20261111T060925Z_3dfebab0\\postgres_p2.dump",
+        "manifiesto_privado": "manifiesto.json",
+        "tamano_bytes": 313537281,
+        "sha256": "3c744ae115df1fab32b67dc5d5c9fc1474be1791a721720a94aa64b4c5721a37",
+        "estado": "RESTAURACION_PENDIENTE",
+        "fuente_registro": "Resultados reales confirmados comunicados por el usuario; sin acceso al respaldo ni al manifiesto privado en esta revision documental.",
+        "cotejo_docker_windows": {
+            "sha256_coincide": true,
+            "tamano_coincide": true,
+            "sha256_en_ambos": "3c744ae115df1fab32b67dc5d5c9fc1474be1791a721720a94aa64b4c5721a37",
+            "tamano_bytes_en_ambos": 313537281,
+            "evidencia": "Cotejo confirmado por el usuario; manifiesto.json privado referido, no inspeccionado ni hasheado en esta revision.",
+            "recalculado_en_esta_revision": false
+        },
+        "catalogo_reportado": {
+            "comando": "pg_restore --list",
+            "legible": true,
+            "base": "red_metropolitana_p2",
+            "entradas_toc": 97,
+            "compresion": "gzip"
+        },
+        "restauracion_completa_ejecutada": false,
+        "relacion_auditoria_20261110": "NO_DEMOSTRADA: respaldo creado el 11 de noviembre; no acredita el mismo estado auditado el 10 de noviembre ni recupera ese instante.",
+        "alcance_sha256": "Bytes del archivo de respaldo; no huella canonica del descriptor ni certificado del origen o igualdad historica de la base.",
+        "alcance_contractual": "Referencia documental fuera de evidencias; ruta privada no admitida como evidencia por el validador vigente. No habilita uso operativo."
+    },
+    "identidad_fisica_snapshot":  {
+                                      "identificador_backup":  null,
+                                      "huella_contenido_db":  null,
+                                      "custodia_inmutabilidad":  "PENDIENTE",
+                                      "vinculo_db_archivos_y_exportacion_futura":  "PENDIENTE",
+                                      "advertencia":  "ID documental y hashes de evidencia no son hash del contenido de la base."
+                                  },
+    "requisitos_contrato":  {
+                                "id_descripcion_fecha_con_zona_y_evidencias":  "PRESENTES_COMO_DESCRIPTOR_DOCUMENTAL",
+                                "referencias_en_areas_permitidas":  "docs/reportes_fase2_2/cobertura_fuentes y bronze/_manifests",
+                                "snapshot_sha256_canonico":  "NO_GENERADO: corresponderia al objeto snapshot exacto aprobado segun json.dumps(sort_keys=True,separators=... ,ensure_ascii=False), no al hash bruto de este fichero",
+                                "acta_privada":  "NO_CREADA",
+                                "autorizacion_operativa":  "NO_CREADA",
+                                "validacion_exportador":  "NO_EJECUTADA"
+                            },
+    "controles_adicionales_no_exigidos_explicitamente_por_rubrica_2_2": [
+        "Restauracion completa pendiente; catalogo legible y cotejo SHA256 no prueban recuperacion completa.",
+        "Certificacion independiente de origen, procedencia del generador y cierre de llegadas tardias no acreditados; mantener certificado_origen=false.",
+        "Igualdad historica entre auditoria, dump y futura base exportada e inmutabilidad fuerte no demostradas; no se presuponen ni se declaran resueltas."
+    ],
+    "pendientes":  [
+                       "Revision humana del alcance prospectivo, limitaciones y justificacion de requisitos academicos segun la rubrica transcrita; enmienda PENDIENTE.",
+                       "Designar entorno, custodio, maquina/operador y control de escritores para delimitar la futura exportacion.",
+                       "Tras revision y autorizacion correspondientes, versionar los documentos y fijar HEAD; no realizado en este cierre documental.",
+                       "Solo despues de aprobaciones reales: acta privada con campos del contrato y huella canonica del objeto snapshot exacto; autorizaciones separadas de exportacion y evaluacion. No creadas."
+                   ]
+}
