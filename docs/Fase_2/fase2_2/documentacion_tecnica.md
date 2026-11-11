@@ -1,3 +1,11 @@
+> **Estado final actualizado:** B fue evaluado una sola vez el 2026-11-11,
+> FINALIZADO a las 20:32:33.890840 UTC, commit de ejecución
+> `931146e26c0dec88ec374bd2b8015c185fdaf90f`. Intento consumido: no repetir ni reajustar.
+> Véase [el cierre académico y técnico](cierre_fase2_2.md). El texto siguiente conserva
+> el contexto histórico de validación A y preparación anterior a B; sus menciones de
+> B pendiente/no autorizado y sus comandos futuros no describen el estado actual ni
+> habilitan otra ejecución. Política y artefactos congelados permanecen intactos.
+
 # 2.2 — Umbral económico: validación en A
 
 Solo A, 60664 personas y 8110 positivos. B permanece cerrado como test único.

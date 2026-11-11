@@ -1,0 +1,23 @@
+{
+  "fecha_utc": "2026-11-11T20:32:33.828262+00:00",
+  "commit": "931146e26c0dec88ec374bd2b8015c185fdaf90f",
+  "politica_sha256": "9f7cfe4cb20423dc02e6f11153000dfd8e42e7b0d47f523828b4ba37e5e2b5ae",
+  "dataset_b_sha256": "e10f2da459b95b811c0f445dcf1d784ce5ddcd806a61c1598bb92fefe032207b",
+  "estado_b": "EJECUTADO",
+  "personas": 59126,
+  "positivos": 7261,
+  "contactados": 6356,
+  "tp": 3107,
+  "fp": 3249,
+  "fn": 4154,
+  "tn": 48616,
+  "precision": 0.48882945248584014,
+  "recall": 0.42790249276959097,
+  "ap": 0.44091587945391414,
+  "roc_auc": 0.8474816543054253,
+  "brier": 0.08506814243576996,
+  "log_loss": 0.2818697402954372,
+  "ganancia_esperada_q": 18504.75256835073,
+  "ganancia_observada_simulada_q": 14825,
+  "umbral_fraccion": "1/3"
+}
