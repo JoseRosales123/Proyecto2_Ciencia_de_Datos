@@ -8,9 +8,15 @@ __pycache__/
 
 # Variables de entorno
 .env
+.env.*
+!.env.example
+!.env.template
+.pgpass
+*.pgpass
 
 # Archivos temporales
 *.log
+*.partial
 .DS_Store
 Thumbs.db
 
@@ -24,6 +30,13 @@ Thumbs.db
 /bronze/
 /datos_fuente/
 /datos_red/
+/datos_modelado_local/
+
+# Modelos binarios: revisión explícita de privacidad antes de publicarlos.
+# Los JSON de procedencia pueden revisarse y versionarse por rutas concretas.
+/modelos/**/*.joblib
+/modelos/**/*.pkl
+/modelos/**/*.pickle
 
 # Credenciales / secretos
 *.key

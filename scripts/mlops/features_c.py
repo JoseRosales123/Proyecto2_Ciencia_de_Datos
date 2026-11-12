@@ -10,8 +10,9 @@ import json
 from pathlib import Path
 
 from scripts.mlops.contrato_c import (
-    FEATURES, SYSTEMS, cutoff, feature_time, utc_time, opaque_id, TemporalControls,
+    FEATURES, SYSTEMS, cutoff, feature_time, utc_time, opaque_id, TemporalControls, digest,
 )
+from scripts.mlops.adaptador_c import validate_normalized_package
 
 
 def read_inputs(folder, date, *, with_controls=False):
@@ -20,6 +21,7 @@ def read_inputs(folder, date, *, with_controls=False):
     paths = [folder / name for name in ('contrato_c.json', 'eventos.csv', 'identidades.csv', 'cdc.csv')]
     if any(path.is_symlink() or not path.is_file() or path.resolve() != path.absolute() for path in paths):
         raise ValueError('Carpeta incompleta o rutas redirigidas')
+    manifest_hash = digest(paths[0])
     metadata = json.loads(paths[0].read_text(encoding='utf-8'))
     required = dict(fecha_corte=date,
                     datos_sinteticos=True, ids_autorizados=True,
@@ -31,14 +33,16 @@ def read_inputs(folder, date, *, with_controls=False):
         if metadata.get('corte_disponibilidad_utc') != '2026-08-30T00:00:00Z':
             raise ValueError('V1 conserva UTC00; para otra política usar V2 explícito')
         controls = TemporalControls(date)
-    elif version == 'INFERENCIA_C_NORMALIZADA_V2':
+    elif version in ('INFERENCIA_C_NORMALIZADA_V2', 'INFERENCIA_C_NORMALIZADA_V3'):
         if not with_controls:
-            raise ValueError('V2 requiere devolver controles explícitos; no descartar política temporal')
+            raise ValueError('V2/V3 requiere devolver controles explícitos; no descartar política temporal')
         if not isinstance(metadata.get('referencia_politica_temporal'), str) or not metadata['referencia_politica_temporal'].strip():
-            raise ValueError('V2 exige referencia de decisión temporal, no inferida')
+            raise ValueError('V2/V3 exige referencia de decisión temporal, no inferida')
         controls = TemporalControls(date, metadata['corte_disponibilidad_utc'], metadata['corte_efectivo_cdc_utc'])
     else:
         raise ValueError('Versión del contrato no admitida')
+    if version == 'INFERENCIA_C_NORMALIZADA_V3':
+        validate_normalized_package(metadata, {path.name: digest(path) for path in paths[1:]})
     schemas = [
         {'evento_id', 'tarjeta_id', 'sistema', 'fecha_feature', 'disponible_utc', 'zona', 'gasto_gtq'},
         {'tarjeta_id', 'unidad_id', 'sistema', 'vigente_desde', 'disponible_utc', 'seq'},
@@ -51,6 +55,10 @@ def read_inputs(folder, date, *, with_controls=False):
             if reader.fieldnames is None or len(reader.fieldnames) != len(schema) or set(reader.fieldnames) != schema:
                 raise ValueError('Esquema normalizado inválido; no aceptar datasets de entrenamiento')
             tables.append(list(reader))
+    if digest(paths[0]) != manifest_hash:
+        raise ValueError('Contrato cambió durante la lectura')
+    if version == 'INFERENCIA_C_NORMALIZADA_V3':
+        validate_normalized_package(metadata, {path.name: digest(path) for path in paths[1:]})
     return (*tables, controls) if with_controls else tables
 
 
