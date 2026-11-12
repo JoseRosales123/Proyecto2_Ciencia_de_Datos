@@ -1,0 +1,7 @@
+segmento,nombre,tamano,porcentaje,tasa_abandono,medianas_eventos_ultimos_7_dias,medianas_eventos_ultimos_28_dias,medianas_cantidad_modos_distintos,medianas_dias_desde_ultimo_evento,medianas_proporcion_eventos_hora_pico,medianas_gasto_acumulado_gtq,medianas_gasto_promedio_evento_gtq
+0,Segmento 0 (revisar perfil),15468,25.49782408017935,0.08113524696146884,3.0,10.0,1.0,2.0,0.9474,10.4,1.0
+1,Segmento 1 (revisar perfil),17245,28.427073717526046,0.05532038271962888,4.0,15.0,2.0,2.0,0.9091,21.5,1.33
+2,Segmento 2 (revisar perfil),7333,12.087893973361465,0.1665075685258421,1.0,6.0,1.0,4.0,0.0,9.1,1.3
+3,Segmento 3 (revisar perfil),2846,4.691415007253067,0.014757554462403373,20.0,72.5,2.0,1.0,0.7265,123.65,1.4
+4,Segmento 4 (revisar perfil),10234,16.86997230647501,0.10533515731874145,2.0,7.0,1.0,3.0,0.9883500000000001,24.5,3.5
+5,Segmento 5 (revisar perfil),7538,12.425820915205064,0.47227381268240914,0.0,4.0,1.0,18.0,1.0,6.0,1.3

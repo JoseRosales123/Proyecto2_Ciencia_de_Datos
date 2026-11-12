@@ -1,0 +1,140 @@
+{
+  "corte": "A",
+  "fecha_corte": "2026-07-01",
+  "n": 60664,
+  "features": [
+    "eventos_ultimos_7_dias",
+    "eventos_ultimos_28_dias",
+    "cantidad_modos_distintos",
+    "dias_desde_ultimo_evento",
+    "proporcion_eventos_hora_pico",
+    "gasto_acumulado_gtq",
+    "gasto_promedio_evento_gtq"
+  ],
+  "categorias_distancia": false,
+  "semilla": 42,
+  "init": "k-means++",
+  "n_init": 10,
+  "algorithm": "lloyd",
+  "imputacion": "mediana A",
+  "escalado": "StandardScaler A",
+  "fecha_utc": "2026-11-11T23:34:45.457877+00:00",
+  "commit": "921dede19e8de703de7c1237aa25aeb89cff8b9f",
+  "versiones": {
+    "numpy": "2.5.4",
+    "pandas": "3.1.0",
+    "sklearn": "1.9.1"
+  },
+  "script_sha256": "5cb4c50239d20511edcf058e04f34a3e9beef8337a93533df51d8370a7cbefce",
+  "limitaciones": "Solo A sintético; relaciones descriptivas, no causales. Clasificador 2.2 intacto.",
+  "modo": "SEGMENTACION_FINAL",
+  "k": 6,
+  "justificacion": "Se selecciono k=6 por equilibrio entre codo, silueta, representacion muestral e interpretabilidad, sin utilizar la etiqueta de abandono.",
+  "varianza_pca": {
+    "pc1": 0.4024408598192206,
+    "pc2": 0.17440061843882043,
+    "acumulada": 0.5768414782580411
+  },
+  "pca_uso": "Solo visualización; KMeans usa siete dimensiones",
+  "etiqueta_uso": "Solo perfiles posteriores a decisión k; nunca distancia/selección",
+  "pendiente": "Interpretar nombres y proponer acciones distintas para >=2 segmentos; revisar tamaños pequeños antes de publicar.",
+  "diagnostico_k": null,
+  "perfiles": [
+    {
+      "segmento": 0,
+      "nombre": "Segmento 0 (revisar perfil)",
+      "tamano": 15468,
+      "porcentaje": 25.49782408017935,
+      "tasa_abandono": 0.08113524696146884,
+      "medianas": {
+        "eventos_ultimos_7_dias": 3.0,
+        "eventos_ultimos_28_dias": 10.0,
+        "cantidad_modos_distintos": 1.0,
+        "dias_desde_ultimo_evento": 2.0,
+        "proporcion_eventos_hora_pico": 0.9474,
+        "gasto_acumulado_gtq": 10.4,
+        "gasto_promedio_evento_gtq": 1.0
+      }
+    },
+    {
+      "segmento": 1,
+      "nombre": "Segmento 1 (revisar perfil)",
+      "tamano": 17245,
+      "porcentaje": 28.427073717526046,
+      "tasa_abandono": 0.05532038271962888,
+      "medianas": {
+        "eventos_ultimos_7_dias": 4.0,
+        "eventos_ultimos_28_dias": 15.0,
+        "cantidad_modos_distintos": 2.0,
+        "dias_desde_ultimo_evento": 2.0,
+        "proporcion_eventos_hora_pico": 0.9091,
+        "gasto_acumulado_gtq": 21.5,
+        "gasto_promedio_evento_gtq": 1.33
+      }
+    },
+    {
+      "segmento": 2,
+      "nombre": "Segmento 2 (revisar perfil)",
+      "tamano": 7333,
+      "porcentaje": 12.087893973361465,
+      "tasa_abandono": 0.1665075685258421,
+      "medianas": {
+        "eventos_ultimos_7_dias": 1.0,
+        "eventos_ultimos_28_dias": 6.0,
+        "cantidad_modos_distintos": 1.0,
+        "dias_desde_ultimo_evento": 4.0,
+        "proporcion_eventos_hora_pico": 0.0,
+        "gasto_acumulado_gtq": 9.1,
+        "gasto_promedio_evento_gtq": 1.3
+      }
+    },
+    {
+      "segmento": 3,
+      "nombre": "Segmento 3 (revisar perfil)",
+      "tamano": 2846,
+      "porcentaje": 4.691415007253067,
+      "tasa_abandono": 0.014757554462403373,
+      "medianas": {
+        "eventos_ultimos_7_dias": 20.0,
+        "eventos_ultimos_28_dias": 72.5,
+        "cantidad_modos_distintos": 2.0,
+        "dias_desde_ultimo_evento": 1.0,
+        "proporcion_eventos_hora_pico": 0.7265,
+        "gasto_acumulado_gtq": 123.65,
+        "gasto_promedio_evento_gtq": 1.4
+      }
+    },
+    {
+      "segmento": 4,
+      "nombre": "Segmento 4 (revisar perfil)",
+      "tamano": 10234,
+      "porcentaje": 16.86997230647501,
+      "tasa_abandono": 0.10533515731874145,
+      "medianas": {
+        "eventos_ultimos_7_dias": 2.0,
+        "eventos_ultimos_28_dias": 7.0,
+        "cantidad_modos_distintos": 1.0,
+        "dias_desde_ultimo_evento": 3.0,
+        "proporcion_eventos_hora_pico": 0.9883500000000001,
+        "gasto_acumulado_gtq": 24.5,
+        "gasto_promedio_evento_gtq": 3.5
+      }
+    },
+    {
+      "segmento": 5,
+      "nombre": "Segmento 5 (revisar perfil)",
+      "tamano": 7538,
+      "porcentaje": 12.425820915205064,
+      "tasa_abandono": 0.47227381268240914,
+      "medianas": {
+        "eventos_ultimos_7_dias": 0.0,
+        "eventos_ultimos_28_dias": 4.0,
+        "cantidad_modos_distintos": 1.0,
+        "dias_desde_ultimo_evento": 18.0,
+        "proporcion_eventos_hora_pico": 1.0,
+        "gasto_acumulado_gtq": 6.0,
+        "gasto_promedio_evento_gtq": 1.3
+      }
+    }
+  ]
+}
